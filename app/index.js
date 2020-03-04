@@ -1,17 +1,34 @@
 import React from "react";
-import { Router, Scene } from "react-native-router-flux";
-
+import { createStackNavigator } from "@react-navigation/stack";
 import Splash from './screens/Splash'
 import Oficios from './screens/Oficios'
 
-export default App = () => {
-  return (
-    <Router>
-      <Scene key="root">
-        <Scene key="splash" component={Splash}  back={false} />
-        <Scene key="oficios" component={Oficios}  back={false}/>
-      </Scene>
-    </Router>
+const MainStack = createStackNavigator({
+    Splash: {
+        screen: Splash,
+        navigationOptions: () => ({
+          title: "Splash",
+          tabBarVisible: false
+        })
+      },
+      Oficios: {
+        screen: Oficios,
+        navigationOptions: () => ({
+          title: "Oficios",
+          tabBarVisible: false
+        })
+      },
+      
+},
+{
+    initialRouteName: "Splash",
+    order: ["Restaurants", "Favorites", "TopLists", "Search", "Account"],
+    tabBarOptions: {
+      inactiveTintColor: "#646464",
+      activeTintColor: "#00a680"
+    }
+  }
   );
-};
+
+export default MainStack
 
