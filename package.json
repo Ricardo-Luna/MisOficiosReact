@@ -1,7 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "dev": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -12,7 +12,9 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-easy-toast": "^1.2.0",
     "react-native-elements": "^1.2.7",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-web": "~0.11.7"
   },
   "devDependencies": {

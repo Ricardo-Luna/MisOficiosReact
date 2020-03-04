@@ -23,11 +23,11 @@ const FadeInView = (props) => {
     >
       {props.children}
     </Animated.View>
-  );
+  ); 
 }
 
 // You can then use your `FadeInView` in place of a `View` in your components:
-export default function FadeInView () {
+export default function fadeInView () {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <FadeInView style={{width: 250, height: 50, backgroundColor: 'powderblue'}}>
