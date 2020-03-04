@@ -1,25 +1,23 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
 
-export default function Login() {
+export default function Login(props) {
   const [error, setError] = useState(null);
   const [pw, setPw] = useState("");
   const [user, setUser] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { setIsLogged } = props;
   return (
     <View>
-
       <Image
         source={require("../../../assets/icono.png")}
         style={styles.logo}
         resizeMode="contain"
       />
-      <Text style={styles.bienvenido}>
-         Bienvenido a Mis Oficios
-      </Text>
+      <Text style={styles.bienvenido}>Bienvenido a Mis Oficios</Text>
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
@@ -52,6 +50,10 @@ export default function Login() {
         containerStyle={styles.container}
         buttonStyle={styles.btn}
         loading={isLoading}
+        onPress={() => {
+          Actions.oficios();
+          setIsLogged(true)
+        }}
       />
     </View>
   );
@@ -61,13 +63,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 150
   },
-  bienvenido:{
+  bienvenido: {
     fontFamily: "sans-serif-light",
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 24,
 
-    color:'#404040'
+    color: "#404040"
   },
   view: {
     alignItems: "center",

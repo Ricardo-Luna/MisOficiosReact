@@ -1,5 +1,5 @@
 import React from 'react'
-import { View,Text } from 'react-native'
+import { View,Text,StyleSheet } from 'react-native'
 
 export default function Oficios(){
     return(
@@ -11,5 +11,5 @@ export default function Oficios(){
     )
 }
 const styles = StyleSheet.create({
-    txt
+    
 });

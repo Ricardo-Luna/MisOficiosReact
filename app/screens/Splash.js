@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet, ToastAndroid } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Image } from "react-native-elements";
 import Modal from "../components/modal";
 import Toast from "react-native-easy-toast";
@@ -8,10 +8,16 @@ import SesionForm from "../components/Login/sesionForm";
 export default function Splash() {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
   return (
     <View style={styles.splash}>
-        {abirModal(toastRef,setRenderComponent, setIsVisibleModal)}
+      {isLogged
+        ? () => {
+            Actions.oficios();
+          }
+        : abirModal(toastRef, setRenderComponent, setIsVisibleModal)}
+
       <Image
         source={require("../../assets/img_letra_g.png")}
         style={styles.backgroundImage}
@@ -22,11 +28,7 @@ export default function Splash() {
         style={styles.logo}
         resizeMode="contain"
       />
-      <Text
-        style={styles.text}
-      >
-        Mis Oficios
-      </Text>
+      <Text style={styles.text}>Mis Oficios</Text>
       <Image
         source={require("../../assets/escudo.png")}
         style={styles.escudo}
@@ -35,8 +37,12 @@ export default function Splash() {
       />
 
       {renderComponent && (
-        <Modal isVisible={isVisibleModal} setIsVisible={setIsVisibleModal} hide={true}>
-          {<SesionForm />}
+        <Modal
+          isVisible={isVisibleModal}
+          setIsVisible={setIsVisibleModal}
+          hide={true}
+        >
+          {<SesionForm setIsLogged={setIsLogged} />}
         </Modal>
       )}
       <Toast ref={toastRef} position="bottom" opacity={1} />
@@ -44,11 +50,11 @@ export default function Splash() {
   );
 }
 
-const abirModal = (toastRef,setRenderComponent, setIsVisibleModal) => {
+const abirModal = (toastRef, setRenderComponent, setIsVisibleModal) => {
   setTimeout(() => {
     setRenderComponent(true);
     setIsVisibleModal(true);
-    toastRef.current.show("Modal Abierto")
+    toastRef.current.show("Modal Abierto");
   }, 2000);
 };
 
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
   backgroundImage: {
     height: 400,
     width: "100%",
-    marginBottom: 20
+    marginBottom: -30
   },
   logo: {
     width: "100%",
