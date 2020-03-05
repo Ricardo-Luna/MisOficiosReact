@@ -1,23 +1,25 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "react-native-elements";
-import Modal from "../components/modal";
+import Modal from "../components/Modal";
 import Toast from "react-native-easy-toast";
-import SesionForm from "../components/Login/sesionForm";
+import SesionForm from "../components/Login/SesionForm";
 
 export default function Splash() {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisibleModal(true);
+      setRenderComponent(true);
+    }, 2000);
+  }, []);
+
   return (
     <View style={styles.splash}>
-      {isLogged
-        ? () => {
-            Actions.oficios();
-          }
-        : abirModal(toastRef, setRenderComponent, setIsVisibleModal)}
-
       <Image
         source={require("../../assets/img_letra_g.png")}
         style={styles.backgroundImage}
@@ -40,23 +42,20 @@ export default function Splash() {
         <Modal
           isVisible={isVisibleModal}
           setIsVisible={setIsVisibleModal}
-          hide={true}
+          hide={false}
         >
-          {<SesionForm setIsLogged={setIsLogged} />}
+          {
+            <SesionForm
+              setRenderComponent={setRenderComponent}
+              setIsLogged={setIsLogged}
+            />
+          }
         </Modal>
       )}
       <Toast ref={toastRef} position="bottom" opacity={1} />
     </View>
   );
 }
-
-const abirModal = (toastRef, setRenderComponent, setIsVisibleModal) => {
-  setTimeout(() => {
-    setRenderComponent(true);
-    setIsVisibleModal(true);
-    toastRef.current.show("Modal Abierto");
-  }, 2000);
-};
 
 const styles = StyleSheet.create({
   splash: {

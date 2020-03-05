@@ -1,15 +1,33 @@
-import React from 'react'
-import { View,Text,StyleSheet } from 'react-native'
+import React, { Component } from 'react'
+import { View, Text } from 'react-native'
 
-export default function Oficios(){
-    return(
-        <View>
+class HttpExample extends Component {
+   state = {
+      data: ''
+   }
+   componentDidMount = () => {
+      fetch('http://10.0.0.17/ApiMisOficios/api/Documentos/5', {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+         console.log(responseJson);
+         this.setState({
+            data: responseJson
+         })
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+   }
+   render() {
+      return (
+         <View>
             <Text>
-                Mostrando los putos oficios siseñor
+               {this.state.data.Message}
             </Text>
-        </View>
-    )
+         </View>
+      )
+   }
 }
-const styles = StyleSheet.create({
-    
-});
+export default HttpExample

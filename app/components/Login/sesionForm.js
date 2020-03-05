@@ -9,7 +9,7 @@ export default function Login(props) {
   const [user, setUser] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { setIsLogged } = props;
+  const { setRenderComponent,setIsLogged } = props;
   return (
     <View>
       <Image
@@ -52,7 +52,8 @@ export default function Login(props) {
         loading={isLoading}
         onPress={() => {
           Actions.oficios();
-          setIsLogged(true)
+          setRenderComponent();
+          setIsLogged()
         }}
       />
     </View>
