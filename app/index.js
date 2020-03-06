@@ -19,7 +19,7 @@ export default App = () => {
           back={false}
           hideNavBar={false}
         />
-      </Scene>
+      </Scene>  
     </Router>
   );
 };
