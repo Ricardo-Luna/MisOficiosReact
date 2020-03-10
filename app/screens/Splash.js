@@ -1,24 +1,49 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Animated } from "react-native";
 import { Image } from "react-native-elements";
 import Modal from "../components/Modal";
 import Toast from "react-native-easy-toast";
 import SesionForm from "../components/Login/SesionForm";
 const screenHeight = Math.round(Dimensions.get("window").height);
 const screenwidth = Math.round(Dimensions.get("window").width);
+
 export default function Splash() {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
+  state = {
+    ready: false,
+    slideUpValue: new Animated.Value(0)
+  };
+
+  _start = () => {
+    return Animated.parallel([
+      Animated.timing(state.slideUpValue, {
+        toValue: 1,
+        duration: 700,
+        useNativeDriver: true
+      })
+    ]).start();
+  };
 
   useEffect(() => {
+    setRenderComponent(false);
+    setIsVisibleModal(false);
     setTimeout(() => {
-      setIsVisibleModal(true);
       setRenderComponent(true);
-    }, 0);
-  }, []);
+      setIsVisibleModal(true);
+      _start();
+    }, 2000);
+  }, [Splash]);
+  //useEffect(() => {
+  //  setTimeout(() => {
+  //    setIsVisibleModal(false)
+  //    setRenderComponent(false);
+  //  }, 1500);
+  //}, [Animated.parallel])
 
+  let { slideUpValue, fadeValue, SlideInLeft } = state;
   return (
     <View style={styles.splash}>
       <Image
@@ -26,21 +51,73 @@ export default function Splash() {
         style={styles.backgroundImage}
         resizeMode="cover"
       />
-      <Image
-        source={require("../../assets/icono.png")}
-        style={styles.logo}
-        resizeMode="contain"
-      />
-      <Text style={styles.text}>Mis Oficios</Text>
+      <Animated.View
+        style={{
+          transform: [
+            {
+              translateY: slideUpValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, -200]
+              })
+            },
+            {
+              scaleX: slideUpValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0.7]
+              })
+            },
+            {
+              scaleY: slideUpValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0.7]
+              })
+            }
+          ]
+        }}
+      >
+        <Image
+          source={require("../../assets/icono.png")}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <Text style={styles.text}>Mis Oficios</Text>
+      </Animated.View>
+
       {/*<Text style={styles.text} resizeMode="top">
         {screenHeight} X {screenwidth}
   </Text>*/}
-      <Image
-        source={require("../../assets/escudo.png")}
-        style={styles.escudo}
-        resizeMode="contain"
-        resizeMethod="auto"
-      />
+      <Animated.View
+        style={{
+          transform: [
+            {
+              translateY: slideUpValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, screenwidth-350]
+              })
+            },
+           // {
+           //   scaleX: slideUpValue.interpolate({
+           //     inputRange: [0, 1],
+           //     outputRange: [1, 1.4]
+           //   })
+           // },
+           // {
+           //   scaleY: slideUpValue.interpolate({
+           //     inputRange: [0, 1],
+           //     outputRange: [1, 1.4]
+           //   })
+           // }
+          ]
+        }}
+      >
+        <Image
+          source={require("../../assets/escudo.png")}
+          style={styles.escudo}
+          resizeMode="center"
+          resizeMethod="resize"
+        />
+      </Animated.View>
+
       <View style={styles.footer}>
         <View
           style={{ width: 50, height: 50, backgroundColor: "#00b0e1", flex: 1 }}
@@ -59,7 +136,7 @@ export default function Splash() {
         />
       </View>
 
-      {/*renderComponent && (
+      {renderComponent && (
         <Modal
           isVisible={isVisibleModal}
           setIsVisible={setIsVisibleModal}
@@ -72,7 +149,7 @@ export default function Splash() {
             />
           }
         </Modal>
-        )*/}
+      )}
       <Toast ref={toastRef} position="bottom" opacity={1} />
     </View>
   );
@@ -87,34 +164,36 @@ const styles = StyleSheet.create({
   backgroundImage: {
     height: 400,
     width: "100%",
-    marginVertical:-50
+    marginVertical: -50
   },
   logo: {
     width: "100%",
     height: 120,
-    marginLeft:50,
-    marginHorizontal:10
+    marginLeft: 50,
+    marginHorizontal: 10
   },
   text: {
     fontFamily: "sans-serif-light",
     textAlign: "center",
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: 30,
 
     color: "#404040"
   },
   textScreen: {
-    alignContent: "center"
+    alignContent: "center",
+    marginVertical: -30
   },
   escudo: {
-    bottom: 100,
-    height: "60%",
-    marginVertical:-50
+    //bottom: 0,
+    width: "100%",
+    height: "80%",
+    marginVertical: -80
   },
   footer: {
     alignItems: "center",
     position: "absolute",
-    bottom: 0,
+    bottom: 110,
     flexDirection: "row",
     alignContent: "flex-end"
   },

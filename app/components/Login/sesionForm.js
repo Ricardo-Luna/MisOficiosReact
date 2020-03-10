@@ -12,12 +12,12 @@ export default function Login(props) {
   const { setRenderComponent,setIsLogged } = props;
   return (
     <View>
-      <Image
+     {/* <Image
         source={require("../../../assets/icono.png")}
         style={styles.logo}
         resizeMode="contain"
       />
-      <Text style={styles.bienvenido}>Bienvenido a Mis Oficios</Text>
+     <Text style={styles.bienvenido}>Bienvenido a Mis Oficios</Text>*/}
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
