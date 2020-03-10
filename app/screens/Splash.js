@@ -4,14 +4,14 @@ import { Image } from "react-native-elements";
 import Modal from "../components/Modal";
 import Toast from "react-native-easy-toast";
 import SesionForm from "../components/Login/SesionForm";
-
+const screenHeight = Math.round(Dimensions.get("window").height);
+const screenwidth = Math.round(Dimensions.get("window").width);
 export default function Splash() {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
-  const screenHeight = Math.round(Dimensions.get("window").height);
-  const screenwidth = Math.round(Dimensions.get("window").width);
+
   useEffect(() => {
     setTimeout(() => {
       setIsVisibleModal(true);
@@ -32,23 +32,34 @@ export default function Splash() {
         resizeMode="contain"
       />
       <Text style={styles.text}>Mis Oficios</Text>
-      <Text style={styles.text} resizeMode="top">
+      {/*<Text style={styles.text} resizeMode="top">
         {screenHeight} X {screenwidth}
-      </Text>
+  </Text>*/}
       <Image
         source={require("../../assets/escudo.png")}
         style={styles.escudo}
         resizeMode="contain"
         resizeMethod="auto"
       />
-      <View style={styles.textScreen}>
-        <Image
-          source={require("../../assets/barralarga.png")}
-          resizeMode="stretch"
+      <View style={styles.footer}>
+        <View
+          style={{ width: 50, height: 50, backgroundColor: "#00b0e1", flex: 1 }}
+        />
+        <View
+          style={{ width: 50, height: 50, backgroundColor: "#6fb74d", flex: 1 }}
+        />
+        <View
+          style={{ width: 50, height: 50, backgroundColor: "#d52f89", flex: 1 }}
+        />
+        <View
+          style={{ width: 50, height: 50, backgroundColor: "#f08119", flex: 1 }}
+        />
+        <View
+          style={{ width: 50, height: 50, backgroundColor: "#46babc", flex: 1 }}
         />
       </View>
 
-      {renderComponent && (
+      {/*renderComponent && (
         <Modal
           isVisible={isVisibleModal}
           setIsVisible={setIsVisibleModal}
@@ -61,7 +72,7 @@ export default function Splash() {
             />
           }
         </Modal>
-      )}
+        )*/}
       <Toast ref={toastRef} position="bottom" opacity={1} />
     </View>
   );
@@ -69,38 +80,45 @@ export default function Splash() {
 
 const styles = StyleSheet.create({
   splash: {
-    marginTop: 0
+    marginTop: 0,
+    alignContent: "center",
+    flexDirection: "column"
   },
   backgroundImage: {
     height: 400,
     width: "100%",
-    marginBottom: -30
+    marginVertical:-50
   },
   logo: {
-    alignSelf: "center",
     width: "100%",
-    height: 150
+    height: 120,
+    marginLeft:50,
+    marginHorizontal:10
   },
   text: {
     fontFamily: "sans-serif-light",
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 24,
-    marginBottom: 50,
+
     color: "#404040"
   },
   textScreen: {
     alignContent: "center"
   },
   escudo: {
-    marginTop: 50,
-    marginBottom: 200,
-    height: "30%",
-    width: "100%"
+    bottom: 100,
+    height: "60%",
+    marginVertical:-50
   },
   footer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 36
+    alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    flexDirection: "row",
+    alignContent: "flex-end"
+  },
+  elementsContainer: {
+    flex: 1
   }
 });
