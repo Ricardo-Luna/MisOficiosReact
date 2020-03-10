@@ -3,7 +3,8 @@ import { Router, Scene } from "react-native-router-flux";
 
 import Splash from "./screens/Splash";
 import Oficios from "./screens/Oficios";
-
+import CardView from "./components/Oficios/OficioCardView"
+import Card from "./tests/Card"
 export default App = () => {
   const [carpetaActual, setCarpetaActual] = useState("");
   return (
@@ -14,8 +15,8 @@ export default App = () => {
         <Scene
           key="oficios"
           renderLeftButton={() => null}
-          title={carpetaActual}
-          component={Oficios}
+          title={"Carpeta"}
+          component={Card}
           back={false}
           hideNavBar={false}
         />
