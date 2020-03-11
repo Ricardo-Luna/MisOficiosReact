@@ -9,15 +9,17 @@ export default function Login(props) {
   const [user, setUser] = useState(null);
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { setRenderComponent,setIsLogged } = props;
+  const { setRenderComponent, setIsLogged } = props;
   return (
     <View>
-     {/* <Image
+      {/* <Image
         source={require("../../../assets/icono.png")}
         style={styles.logo}
         resizeMode="contain"
       />
-     <Text style={styles.bienvenido}>Bienvenido a Mis Oficios</Text>*/}
+      <Text style={styles.bienvenido}>Bienvenido a mi nuebo post</Text>
+     />*/}
+
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
@@ -53,7 +55,7 @@ export default function Login(props) {
         onPress={() => {
           Actions.oficios();
           setRenderComponent();
-          setIsLogged()
+          setIsLogged();
         }}
       />
     </View>

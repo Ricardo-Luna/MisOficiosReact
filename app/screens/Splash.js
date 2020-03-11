@@ -140,7 +140,7 @@ export default function Splash() {
         <Modal
           isVisible={isVisibleModal}
           setIsVisible={setIsVisibleModal}
-          hide={true}
+          hide={false}
         >
           {
             <SesionForm
