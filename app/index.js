@@ -16,7 +16,7 @@ export default App = () => {
           key="oficios"
           renderLeftButton={() => null}
           title={"Carpeta"}
-          component={Card}
+          component={Oficios}
           back={false}
           hideNavBar={false}
         />
