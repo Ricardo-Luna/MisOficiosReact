@@ -11,7 +11,7 @@ export default function Login(props) {
   const [isLoading, setIsLoading] = useState(false);
   const { setRenderComponent, setIsLogged } = props;
   return (
-    <View>
+    <View style={styles.modal}>
       {/* <Image
         source={require("../../../assets/icono.png")}
         style={styles.logo}
@@ -62,6 +62,9 @@ export default function Login(props) {
   );
 }
 const styles = StyleSheet.create({
+  modal:{
+    
+  },
   logo: {
     width: "100%",
     height: 150
@@ -80,7 +83,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   input: {
-    marginTop: 10
+    marginTop: 10,
+    backgroundColor:"rgba(255, 255, 255, .4)"
+
   },
   container: {
     marginTop: 20,

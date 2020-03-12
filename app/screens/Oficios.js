@@ -3,13 +3,17 @@ import React, { Component, useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, Flatlist } from "react-native";
 import { Card, ListItem, Button, Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
+import BottomSheet from "reanimated-bottom-sheet";
+import Carpetas from "../components/Carpetas/Carpetas";
+import Header from "../components/Carpetas/Header";
+import Moment from "moment";
 
 export default function Oficios() {
   const [docs, setDocs] = useState([]);
   const [actualizar, setActualizar] = useState([]);
   useEffect(() => {
     fetch(
-      "http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=d582fcc8-7b9e-4e3f-9980-cf77299cb0bc",
+      "http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=50&idcarpeta=A65465FD-6A5A-49B3-95DD-3FC5BB3A71F5",
       {
         method: "GET"
       }
@@ -23,12 +27,20 @@ export default function Oficios() {
       });
   }, []);
 
+  const dateFormater = dt => {
+    Moment.locale("en");
+    return <Text>{Moment(dt).format("d MMM")}</Text>; //basically you can do all sorts of the formatting and others
+  };
+  const renderHeader = () =>{
+    <Header/>
+  }
   return (
-    <ScrollView
-    >
+    <ScrollView>
       {docs.map((u, i) => {
         return (
-          <Card key={i}>
+          <Card 
+          key={i}
+          >
             {/*Padre del componente */}
             <View style={{ flexDirection: "column" }}>
               {/*Elementos header */}
@@ -53,7 +65,7 @@ export default function Oficios() {
                 <Text> </Text>
                 <Text>{u.FechaEnvio}</Text>
                 <Text> </Text>
-                <Text>{new Date(u.FechaCreacion).format}</Text>
+                <Text> {dateFormater(u.FechaEnvio)}</Text>
                 <Text> </Text>
                 <View style={styles.iconsfin}>
                   {u.TieneArchivosAdjuntos && (
@@ -65,7 +77,6 @@ export default function Oficios() {
                     />
                   )}
 
-                  <Text> </Text>
                   <Icon
                     name="arrow-down-bold-box-outline"
                     type="material-community"
@@ -97,6 +108,13 @@ export default function Oficios() {
           </Card>
         );
       })}
+      <View>
+        <BottomSheet 
+        snapPoints={[300, 200, 0]} 
+
+        renderHeader={renderHeader()}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -122,11 +140,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000"
   },
   asunto: {
-    
-    fontSize:16
+    fontSize: 16
   },
-  destinatarios:{
-    fontSize:10,
-    top:5
+  destinatarios: {
+    fontSize: 10,
+    top: 5
   }
 });
