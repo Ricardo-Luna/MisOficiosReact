@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { ScrollView } from "react-native-gesture-handler";
 import { View, Text, StyleSheet } from "react-native";
 import { Card, Icon } from "react-native-elements";
 import Moment from "moment";
@@ -11,7 +11,7 @@ export default function OficiosCardView() {
 
   useEffect(() => {
     fetch(
-      "http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=5&idcarpeta=88C8C04F-29B7-487D-B9E4-62D0E9433FD4",
+      "http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=3f5863a2-f05b-4a07-9f81-4cc8cec30658",
       {
         method: "GET"
       }
@@ -29,15 +29,13 @@ export default function OficiosCardView() {
     return <Text>{Moment(dt).format("d/MM/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
   };
   return (
-    <View>
+    <ScrollView>
       {docs.map((u, i) => {
         return (
           <Card key={i}>
             {/*Padre del componente */}
             <View
-              accessibilityRole='button'
-              onPress={console.log("Silenced")
-              }
+              accessibilityRole="button"
               style={{ flexDirection: "column" }}
             >
               {/*Elementos header */}
@@ -104,7 +102,7 @@ export default function OficiosCardView() {
           </Card>
         );
       })}
-    </View>
+    </ScrollView>
     /* <CardView cardElevation={2} cardMaxElevation={2} cornerRadius={5}>
       <Text>Elevation 0</Text>
     </CardView>*/
