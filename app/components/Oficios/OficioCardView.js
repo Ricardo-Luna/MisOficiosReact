@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { View, Text, StyleSheet } from "react-native";
 import { Card, Icon } from "react-native-elements";
+
 import Moment from "moment";
 
-export default function OficiosCardView() {
+export default function OficiosCardView(props) {
   const [docs, setDocs] = useState([]);
-  const [actualizar, setActualizar] = useState([]);
-  const [loading, setloading] = useState("");
-
+  const [actualizar, setActualizar] = useState([])
+  const { carpeta,setLoading } = props;
+  
   useEffect(() => {
     fetch(
-      "http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=3f5863a2-f05b-4a07-9f81-4cc8cec30658",
+      `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`,
       {
         method: "GET"
       }
@@ -19,11 +20,13 @@ export default function OficiosCardView() {
       .then(response => response.json())
       .then(responseJson => {
         setDocs(responseJson["Documentos"]);
+        setLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setLoading(false);
       });
-  }, []);
+  }, [carpeta]);
   const dateFormater = dt => {
     Moment.locale("en");
     return <Text>{Moment(dt).format("d/MM/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others

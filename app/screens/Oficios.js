@@ -6,18 +6,19 @@ import ActionButton from "react-native-action-button";
 import RBSheet from "react-native-raw-bottom-sheet";
 import OficiosCardView from "../components/Oficios/OficioCardView";
 import Carpetas from "../components/Carpetas/Carpetas";
+import Loading from "../components/Loading";
 import { Actions } from "react-native-router-flux";
-import { YellowBox } from "react-native";
 
-YellowBox.ignoreWarnings([
-  "Warning: componentwillreceiveprops",
-  "Setting a timer"
-]);
-export default function Oficios() {
+export default function Oficios(props) {
+  const [carpetas, setCarpetas] = useState(
+    "a65465fd-6a5a-49b3-95dd-3fc5bb3a71f5"
+  );
+  const [loading, setLoading] = useState(false);
   const refRBSheet = useRef();
+  const { setCarpetaActual } = props;
   return (
     <View>
-      <OficiosCardView />
+      <OficiosCardView carpeta={carpetas} setLoading={setLoading} />
       <ActionButton buttonColor="#46babc" offsetY={10} offsetX={10}>
         <ActionButton.Item
           buttonColor="#00b0e1"
@@ -30,7 +31,6 @@ export default function Oficios() {
             backgroundColor="transparent"
             type="material-community"
             color="black"
-            
           />
         </ActionButton.Item>
         <ActionButton.Item buttonColor="#6fb74d">
@@ -39,7 +39,6 @@ export default function Oficios() {
             backgroundColor="transparent"
             type="material-community"
             color="black"
-       
           />
         </ActionButton.Item>
         <ActionButton.Item buttonColor="#d52f89">
@@ -48,16 +47,14 @@ export default function Oficios() {
             backgroundColor="transparent"
             type="material-community"
             color="black"
-
           />
         </ActionButton.Item>
-        <ActionButton.Item buttonColor="#f08119" onPress={Actions.splash()}>
+        <ActionButton.Item buttonColor="#f08119">
           <Icon
             name={"account-arrow-left"}
             backgroundColor="transparent"
             type="material-community"
             color="black"
-
           />
         </ActionButton.Item>
       </ActionButton>
@@ -77,8 +74,12 @@ export default function Oficios() {
           }
         }}
       >
-        <Carpetas />
+        <Carpetas
+          setCarpetaID={setCarpetas}
+          setCarpetaActual={setCarpetaActual}
+        />
       </RBSheet>
+      <Loading text="Cargando Archivos" isVisible={loading} />
     </View>
   );
 }

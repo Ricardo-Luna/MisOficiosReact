@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { ListItem } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
-export default function Carpetas() {
+export default function Carpetas(props) {
+  //  console.log(props);
+
   const [carpetas, setCarpetas] = useState([]);
+  const { setCarpetaID, setCarpetaActual } = props;
   useEffect(() => {
     fetch(
       "http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/b3be6e2f-7e79-474c-9985-fab45ed8956a",
@@ -22,7 +25,16 @@ export default function Carpetas() {
   return (
     <ScrollView>
       {carpetas.map((u, i) => {
-        return <ListItem key={i} title={u.Nombre} />;
+        return (
+          <ListItem
+            key={i}
+            title={u.Nombre}
+            onPress={() => {
+              setCarpetaID(u.IdCarpeta);
+              
+            }}
+          />
+        );
       })}
     </ScrollView>
   );
