@@ -13,11 +13,15 @@ export default function Oficios(props) {
   const [carpetas, setCarpetas] = useState(
     "a65465fd-6a5a-49b3-95dd-3fc5bb3a71f5"
   );
-  console.log(props.id);
-
+  const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(false);
   const refRBSheet = useRef();
   const { setCarpetaActual } = props;
+  useEffect(() => {
+    setLoading(true);
+  }, []);
+
+  //console.log(props.id);
   return (
     <View style={styles.buttonsheet}>
       <View style={styles.cardview}>
