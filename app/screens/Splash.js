@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, Animated } from "react-native";
 import { Image } from "react-native-elements";
-import Modal from "../components/Modal";
 import Toast from "react-native-easy-toast";
+import Modal from "../components/Modal";
 import SesionForm from "../components/Login/SesionForm";
 const screenHeight = Math.round(Dimensions.get("window").height);
 const screenwidth = Math.round(Dimensions.get("window").width);
@@ -12,6 +12,7 @@ export default function Splash() {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
+  var md5 = require('md5')
   state = {
     ready: false,
     slideUpValue: new Animated.Value(0)
@@ -28,7 +29,7 @@ export default function Splash() {
   };
 
   useEffect(() => {
-    setRenderComponent(false);
+    setRenderComponent(false);    
     setIsVisibleModal(false);
     setTimeout(() => {
       setRenderComponent(true);

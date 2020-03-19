@@ -2,15 +2,30 @@ import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { View, Text, StyleSheet } from "react-native";
 import { Card, Icon } from "react-native-elements";
+import axios from "react-native-axios";
 
 import Moment from "moment";
 
 export default function OficiosCardView(props) {
   const [docs, setDocs] = useState([]);
-  const [actualizar, setActualizar] = useState([])
-  const { carpeta,setLoading } = props;
-  
-  useEffect(() => {
+  const [actualizar, setActualizar] = useState([]);
+  const { carpeta, setLoading } = props;
+
+  const fetchDocs = () => {
+    axios
+      .get(
+        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`
+      )
+      .then(response => {
+        setDocs(response["Documentos"]);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
+      });
+  };
+
+  const fetchHttpDocs = () => {
     fetch(
       `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`,
       {
@@ -26,6 +41,10 @@ export default function OficiosCardView(props) {
         console.error(error);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchHttpDocs()
   }, [carpeta]);
   const dateFormater = dt => {
     Moment.locale("en");

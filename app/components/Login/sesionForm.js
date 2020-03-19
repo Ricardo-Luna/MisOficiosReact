@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
+import axios from "react-native-axios";
 
 export default function Login(props) {
   const [error, setError] = useState(null);
@@ -10,13 +11,64 @@ export default function Login(props) {
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { setRenderComponent, setIsLogged } = props;
+  const credenciales = {
+    NickName: "ricardo.luna",
+    Password: "123",
+    AccesoAplicacion: 1,
+    DerechosRangoInicial: 1000,
+    DerechosRangoFinal: 1012
+  };
+  const headers = {
+    "Content-Type": "application/json"
+  };
+  const loginAxios = () => {
+    axios
+      .post(`10.0.0.17/ApiUsuarios/api/Usuarios/Login`, credenciales, headers)
+      .then(response => {
+        console.log(response.IdUsuario);
+      });
+  };
+
+  let data = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({
+      NickName: "ricardo.luna",
+      password: "123",
+      AccesoAplicacion: 1,
+      DerechosRangoInicial: 1000,
+      DerechosRangoFinal: 1012
+    })
+  };
+  const login = () => {
+    fetch(
+      `10.0.0.17/ApiUsuarios/api/Usuarios/Login`,
+      { method: "POST" },
+      {
+        body: JSON.stringify({
+          NickName: "ricardo.luna",
+          password: "123",
+          AccesoAplicacion: 1,
+          DerechosRangoInicial: 1000,
+          DerechosRangoFinal: 1012
+        })
+      }
+    )
+      .then(response => response.json()) //Promesa
+      .then(responsejson => console.log(responsejson))
+      .catch(error => {
+        console.log(error);
+      });
+  };
   return (
     <View style={styles.modal}>
       {/* <Image
         source={require("../../../assets/icono.png")}
         style={styles.logo}
         resizeMode="contain"
-      />
+      /> 
       <Text style={styles.bienvenido}>Bienvenido a mi nuebo post</Text>
      />*/}
 
@@ -33,7 +85,7 @@ export default function Login(props) {
         errorMessage={error}
       />
       <Input
-        placeholder="Contraseña"
+        placeholdear="Contraseña"
         containerStyle={styles.input}
         password={true}
         defaultValue="123"
@@ -53,18 +105,17 @@ export default function Login(props) {
         buttonStyle={styles.btn}
         loading={isLoading}
         onPress={() => {
-          Actions.oficios();
-          setRenderComponent();
-          setIsLogged();
+          loginAxios();
+          //Actions.oficios();
+          //setRenderComponent();
+          //setIsLogged();
         }}
       />
     </View>
   );
 }
 const styles = StyleSheet.create({
-  modal:{
-    
-  },
+  modal: {},
   logo: {
     width: "100%",
     height: 150
@@ -84,8 +135,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginTop: 10,
-    backgroundColor:"rgba(255, 255, 255, .4)"
-
+    backgroundColor: "rgba(255, 255, 255, .4)"
   },
   container: {
     marginTop: 20,
