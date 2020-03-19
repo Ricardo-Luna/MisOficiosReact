@@ -20,6 +20,8 @@ export default App = () => {
           component={Oficios}
           back={false}
           hideNavBar={false}
+          onBack={()=>{console.log("salsipuedes")}}
+          
         />
         
       </Scene>  

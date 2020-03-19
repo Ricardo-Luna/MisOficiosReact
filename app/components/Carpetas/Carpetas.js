@@ -6,10 +6,10 @@ export default function Carpetas(props) {
   //  console.log(props);
 
   const [carpetas, setCarpetas] = useState([]);
-  const { setCarpetaID, setCarpetaActual } = props;
+  const { setCarpetaID, setCarpetaActual,IdUsuario } = props;
   useEffect(() => {
     fetch(
-      "http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/b3be6e2f-7e79-474c-9985-fab45ed8956a",
+      `http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${IdUsuario}`,
       {
         method: "GET"
       }

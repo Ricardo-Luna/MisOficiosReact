@@ -1,67 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
+import Toast from "react-native-easy-toast";
 
 export default function Login(props) {
   const [error, setError] = useState(null);
   const [pw, setPw] = useState("");
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [permiso, setPermiso] = useState(false);
   const { setRenderComponent, setIsLogged } = props;
+  const toastRef = useRef();
   const credenciales = {
-    NickName: "ricardo.luna",
-    Password: "123",
+    NickName: user,
+    Password: pw,
     AccesoAplicacion: 1,
     DerechosRangoInicial: 1000,
     DerechosRangoFinal: 1012
   };
-  const headers = {
-    "Content-Type": "application/json"
-  };
+
   const loginAxios = () => {
-    axios
-      .post(`10.0.0.17/ApiUsuarios/api/Usuarios/Login`, credenciales, headers)
-      .then(response => {
-        console.log(response.IdUsuario);
+    axios({
+      method: "post",
+      url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
+      data: credenciales,
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(function(response) {
+        //handle success
+
+        if (response.data.Permisos[0].NumeroPermiso === 1000) {
+          Actions.oficios({id: response.data.IdUsuario});
+          setRenderComponent();
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          console.log("Not equal");
+        }
+      })
+      .catch(function(response) {
+        //handle error
+        setIsLoading(false);
+        console.log(response);
       });
   };
 
-  let data = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    },
-    body: JSON.stringify({
-      NickName: "ricardo.luna",
-      password: "123",
-      AccesoAplicacion: 1,
-      DerechosRangoInicial: 1000,
-      DerechosRangoFinal: 1012
-    })
-  };
-  const login = () => {
-    fetch(
-      `10.0.0.17/ApiUsuarios/api/Usuarios/Login`,
-      { method: "POST" },
-      {
-        body: JSON.stringify({
-          NickName: "ricardo.luna",
-          password: "123",
-          AccesoAplicacion: 1,
-          DerechosRangoInicial: 1000,
-          DerechosRangoFinal: 1012
-        })
-      }
-    )
-      .then(response => response.json()) //Promesa
-      .then(responsejson => console.log(responsejson))
-      .catch(error => {
-        console.log(error);
-      });
-  };
   return (
     <View style={styles.modal}>
       {/* <Image
@@ -75,7 +61,7 @@ export default function Login(props) {
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
-        defaultValue="ricardo.luna"
+        defaultValue="ricardo.lun"
         onChange={e => setUser(e.nativeEvent.text)}
         rightIcon={{
           type: "material-community",
@@ -88,7 +74,7 @@ export default function Login(props) {
         placeholdear="Contraseña"
         containerStyle={styles.input}
         password={true}
-        defaultValue="123"
+        defaultValue="12"
         secureTextEntry={hidePassword}
         onChange={e => setPw(e.nativeEvent.text)}
         rightIcon={{
@@ -105,10 +91,8 @@ export default function Login(props) {
         buttonStyle={styles.btn}
         loading={isLoading}
         onPress={() => {
+          setIsLoading(true);
           loginAxios();
-          //Actions.oficios();
-          //setRenderComponent();
-          //setIsLogged();
         }}
       />
     </View>

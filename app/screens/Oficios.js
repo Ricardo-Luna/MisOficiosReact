@@ -13,6 +13,8 @@ export default function Oficios(props) {
   const [carpetas, setCarpetas] = useState(
     "a65465fd-6a5a-49b3-95dd-3fc5bb3a71f5"
   );
+  console.log(props.id);
+
   const [loading, setLoading] = useState(false);
   const refRBSheet = useRef();
   const { setCarpetaActual } = props;
@@ -39,6 +41,7 @@ export default function Oficios(props) {
           <Carpetas
             setCarpetaID={setCarpetas}
             setCarpetaActual={setCarpetaActual}
+            IdUsuario={props.id}
           />
         </RBSheet>
         <Loading text="Cargando Archivos" isVisible={loading} />
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
 
     //backgroundColor: "transparent"
   },
-  cardview:{
+  cardview: {
     flex: 1
   },
   viewScreen: {
