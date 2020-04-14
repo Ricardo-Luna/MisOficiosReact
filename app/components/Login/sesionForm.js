@@ -7,9 +7,11 @@ import Toast from "react-native-easy-toast";
 
 export default function Login(props) {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [error, setError] = useState(null);
   const [pw, setPw] = useState("123");
+  const [carpetas, setCarpetas] = useState("");
+  const [carpetaInicial, setCarpetaInicial] = useState("");
   const [user, setUser] = useState("ricardo.luna");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,52 +23,73 @@ export default function Login(props) {
     Password: pw,
     AccesoAplicacion: 1,
     DerechosRangoInicial: 1000,
-    DerechosRangoFinal: 1012
+    DerechosRangoFinal: 1012,
   };
-
-  const getCarpetas = usuario => {
+  var carpeta = "", id="";
+  const getCarpetas = (usuario) => {
     {
       fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${usuario}`, {
-        method: "GET"
+        method: "GET",
       })
-        .then(response => response.json())
-        .then(responseJson => {
-         // console.log(responseJson);
-          
-          //setCarpetas(responseJson);
-        })
-        .catch(error => {
+        .then((response) => response.json())
+        .then((responseJson) => {
+          //console.log(responseJson);
+          setCarpetas(responseJson);
+          //console.log(carpetas);
+          console.log(carpeta);
+          // setCarpetaInicial(
+          //   responseJson.map.filter((u) => {
+          //     u.Nombre === "Recibidos";
+          //   })
+          // );
+          responseJson.map((u, i) => {
+            //console.log(u.Nombre);
+            if (u.Nombre === "Recibidos") {
+              setCarpetaInicial(u.IdCarpeta);
+              carpeta = u.IdCarpeta;
+              console.log(`carpeta ${carpeta}`);
+            }
+          });
+        }).then(()=>{
+          Actions.oficios({
+            id: id,
+            inicio: carpeta,
+          })
+          setRenderComponent();
+          setIsLoading(false);
+        }
+        )
+        .catch((error) => {
           console.error(error);
         });
     }
   };
 
-  const loginAxios = callback => {
+  const loginAxios = (callback) => {
     axios({
       method: "post",
       url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
       data: credenciales,
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     })
-      .then(function(response) {
+      .then(function (response) {
         //handle success
 
         if (response.data.Permisos[0].NumeroPermiso === 1000) {
-        //  console.log(response.data.IdUsuario);
-
-          getCarpetas(response.data.IdUsuario)
-            Actions.oficios({ id: response.data.IdUsuario });
-          setRenderComponent();
-          setIsLoading(false);
+          //  console.log(response.data.IdUsuario);
+          getCarpetas(response.data.IdUsuario);
+          id=response.data.IdUsuario
+          
         } else {
           setIsLoading(false);
           //console.log("Not equal");
         }
       })
-      .catch(function(response) {
+      
+      .catch(function (response) {
         //handle error
         setIsLoading(false);
-        //console.log(response);
+        console.log(response);
       });
   };
 
@@ -84,11 +107,11 @@ export default function Login(props) {
         placeholder="Usuario"
         containerStyle={styles.input}
         defaultValue="ricardo.luna"
-        onChange={e => setUser(e.nativeEvent.text)}
+        onChange={(e) => setUser(e.nativeEvent.text)}
         rightIcon={{
           type: "material-community",
           name: "account-circle-outline",
-          color: "#c2c2c2"
+          color: "#c2c2c2",
         }}
         errorMessage={error}
       />
@@ -98,12 +121,12 @@ export default function Login(props) {
         password={true}
         defaultValue="123"
         secureTextEntry={hidePassword}
-        onChange={e => setPw(e.nativeEvent.text)}
+        onChange={(e) => setPw(e.nativeEvent.text)}
         rightIcon={{
           type: "material-community",
           name: hidePassword ? "eye-outline" : "eye-off-outline",
           color: "#c2c2c2",
-          onPress: () => setHidePassword(!hidePassword)
+          onPress: () => setHidePassword(!hidePassword),
         }}
         errorMessage={null}
       />
@@ -133,7 +156,7 @@ const styles = StyleSheet.create({
   modal: {},
   logo: {
     width: "100%",
-    height: 150
+    height: 150,
   },
   bienvenido: {
     fontFamily: "sans-serif-light",
@@ -141,29 +164,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24,
 
-    color: "#404040"
+    color: "#404040",
   },
   view: {
     alignItems: "center",
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   input: {
     marginTop: 10,
-    backgroundColor: "rgba(255, 255, 255, .4)"
+    backgroundColor: "rgba(255, 255, 255, .4)",
   },
   container: {
     marginTop: 20,
-    width: "100%"
+    width: "100%",
   },
   container: {
     marginTop: 20,
-    width: "100%"
+    width: "100%",
   },
   switch: {
-    alignSelf: "center"
+    alignSelf: "center",
   },
   btn: {
-    backgroundColor: "#404040"
-  }
+    backgroundColor: "#404040",
+  },
 });

@@ -36,7 +36,7 @@ export default function Splash() {
       setIsVisibleModal(true);
       _start();
     }, 2000);
-  }, [Splash]);
+  }, []);
   //useEffect(() => {
   //  setTimeout(() => {
   //    setIsVisibleModal(false)

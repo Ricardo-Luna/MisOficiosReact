@@ -11,13 +11,15 @@ import Loading from "../components/Loading";
 
 export default function Oficios(props) {
   const [carpetas, setCarpetas] = useState(
-    "a65465fd-6a5a-49b3-95dd-3fc5bb3a71f5"
+    props.inicio
   );
-  const [carpetaInicial, setcarpetaInicial] = useState("");
+  //const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(false);
   const refRBSheet = useRef();
+
   useEffect(() => {
-    setLoading(false);
+    setLoading(true);
+    console.log(props);
   }, []);
   useEffect(() => {
     const backAction = () => {

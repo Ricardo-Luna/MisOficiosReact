@@ -26,8 +26,8 @@ export default App = () => {
           title={"Recibidos"}
           component={Oficios}
           hideNavBar={false}
-          back={true}
-          type="reset"
+          back={false}
+          
         />
 
         <Scene key="documento" hideNavBar={true} component={Documento} />
