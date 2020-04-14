@@ -29,6 +29,8 @@ export default function Splash() {
   };
 
   useEffect(() => {
+    console.log(`logged: ${isLogged}`);
+    
     setRenderComponent(false);    
     setIsVisibleModal(false);
     setTimeout(() => {
@@ -36,7 +38,7 @@ export default function Splash() {
       setIsVisibleModal(true);
       _start();
     }, 2000);
-  }, []);
+  }, [Splash]);
   //useEffect(() => {
   //  setTimeout(() => {
   //    setIsVisibleModal(false)

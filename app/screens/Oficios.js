@@ -10,16 +10,14 @@ import Carpetas from "../components/Carpetas/Carpetas";
 import Loading from "../components/Loading";
 
 export default function Oficios(props) {
-  const [carpetas, setCarpetas] = useState(
-    props.inicio
-  );
+  const [carpetas, setCarpetas] = useState(props.inicio);
   //const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(false);
   const refRBSheet = useRef();
 
   useEffect(() => {
-    setLoading(true);
-    console.log(props);
+    setLoading(false);
+    setCarpetas(props.inicio);
   }, []);
   useEffect(() => {
     const backAction = () => {
@@ -62,7 +60,11 @@ export default function Oficios(props) {
             },
           }}
         >
-          <Carpetas setCarpetaID={setCarpetas} IdUsuario={props.id} />
+          <Carpetas
+            setCarpetaID={setCarpetas}
+            IdUsuario={props.id}
+            carpetasCompleta={props.carpeta}
+          />
         </RBSheet>
         <Loading text="Cargando Archivos" isVisible={loading} />
       </View>

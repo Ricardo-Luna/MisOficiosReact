@@ -10,7 +10,7 @@ export default function Login(props) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [error, setError] = useState(null);
   const [pw, setPw] = useState("123");
-  const [carpetas, setCarpetas] = useState("");
+  //const [carpetas, setCarpetas] = useState("");
   const [carpetaInicial, setCarpetaInicial] = useState("");
   const [user, setUser] = useState("ricardo.luna");
   const [hidePassword, setHidePassword] = useState(true);
@@ -25,7 +25,9 @@ export default function Login(props) {
     DerechosRangoInicial: 1000,
     DerechosRangoFinal: 1012,
   };
-  var carpeta = "", id="";
+  var carpeta = "",
+    id = "",
+    carpetas = "";
   const getCarpetas = (usuario) => {
     {
       fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${usuario}`, {
@@ -34,7 +36,7 @@ export default function Login(props) {
         .then((response) => response.json())
         .then((responseJson) => {
           //console.log(responseJson);
-          setCarpetas(responseJson);
+          //setCarpetas(responseJson);
           //console.log(carpetas);
           console.log(carpeta);
           // setCarpetaInicial(
@@ -42,7 +44,11 @@ export default function Login(props) {
           //     u.Nombre === "Recibidos";
           //   })
           // );
+          carpetas = responseJson;
           responseJson.map((u, i) => {
+            console.log(isEnabled);
+
+            setIsLogged(isEnabled);
             //console.log(u.Nombre);
             if (u.Nombre === "Recibidos") {
               setCarpetaInicial(u.IdCarpeta);
@@ -50,15 +56,16 @@ export default function Login(props) {
               console.log(`carpeta ${carpeta}`);
             }
           });
-        }).then(()=>{
+        })
+        .then(() => {
           Actions.oficios({
             id: id,
             inicio: carpeta,
-          })
+            carpeta: carpetas,
+          });
           setRenderComponent();
           setIsLoading(false);
-        }
-        )
+        })
         .catch((error) => {
           console.error(error);
         });
@@ -78,14 +85,13 @@ export default function Login(props) {
         if (response.data.Permisos[0].NumeroPermiso === 1000) {
           //  console.log(response.data.IdUsuario);
           getCarpetas(response.data.IdUsuario);
-          id=response.data.IdUsuario
-          
+          id = response.data.IdUsuario;
         } else {
           setIsLoading(false);
           //console.log("Not equal");
         }
       })
-      
+
       .catch(function (response) {
         //handle error
         setIsLoading(false);
