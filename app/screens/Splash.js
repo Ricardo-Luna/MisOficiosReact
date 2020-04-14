@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, Animated } from "react-native";
 import { Image } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import Modal from "../components/Modal";
-import SesionForm from "../components/Login/SesionForm";
+import SesionForm from "../components/Login/sesionForm";
 const screenHeight = Math.round(Dimensions.get("window").height);
 const screenwidth = Math.round(Dimensions.get("window").width);
 

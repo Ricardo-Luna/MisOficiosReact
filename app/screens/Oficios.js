@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState, useRef } from "react";
 import { Icon } from "react-native-elements";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, Button, Alert, BackHandler } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import ActionButton from "react-native-action-button";
 import { Actions } from "react-native-router-flux";
@@ -16,12 +16,30 @@ export default function Oficios(props) {
   const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(false);
   const refRBSheet = useRef();
-  const { setCarpetaActual } = props;
   useEffect(() => {
-    setLoading(true);
+    setLoading(false);
   }, []);
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
+        {
+          text: "No",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "Sí", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
 
-  //console.log(props.id);
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  });
+
   return (
     <View style={styles.buttonsheet}>
       <View style={styles.cardview}>
@@ -35,18 +53,14 @@ export default function Oficios(props) {
           closeOnPressMask={true}
           customStyles={{
             wrapper: {
-              backgroundColor: "transparent"
+              backgroundColor: "transparent",
             },
             draggableIcon: {
-              backgroundColor: "grey"
-            }
+              backgroundColor: "grey",
+            },
           }}
         >
-          <Carpetas
-            setCarpetaID={setCarpetas}
-            setCarpetaActual={setCarpetaActual}
-            IdUsuario={props.id}
-          />
+          <Carpetas setCarpetaID={setCarpetas} IdUsuario={props.id} />
         </RBSheet>
         <Loading text="Cargando Archivos" isVisible={loading} />
       </View>
@@ -107,20 +121,19 @@ export default function Oficios(props) {
 const styles = StyleSheet.create({
   buttonsheet: {
     flex: 2,
-    flexDirection: "row"
-
+    flexDirection: "row",
     //backgroundColor: "transparent"
   },
   cardview: {
-    flex: 1
+    flex: 1,
   },
   viewScreen: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
   },
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: "white"
-  }
+    color: "white",
+  },
 });

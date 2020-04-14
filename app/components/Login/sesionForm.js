@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Switch, View, Text } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Toast from "react-native-easy-toast";
 
 export default function Login(props) {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [error, setError] = useState(null);
-  const [pw, setPw] = useState("");
-  const [user, setUser] = useState("");
+  const [pw, setPw] = useState("123");
+  const [user, setUser] = useState("ricardo.luna");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [permiso, setPermiso] = useState(false);
@@ -22,7 +24,24 @@ export default function Login(props) {
     DerechosRangoFinal: 1012
   };
 
-  const loginAxios = () => {
+  const getCarpetas = usuario => {
+    {
+      fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${usuario}`, {
+        method: "GET"
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+         // console.log(responseJson);
+          
+          //setCarpetas(responseJson);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  };
+
+  const loginAxios = callback => {
     axios({
       method: "post",
       url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
@@ -33,18 +52,21 @@ export default function Login(props) {
         //handle success
 
         if (response.data.Permisos[0].NumeroPermiso === 1000) {
-          Actions.oficios({id: response.data.IdUsuario});
+        //  console.log(response.data.IdUsuario);
+
+          getCarpetas(response.data.IdUsuario)
+            Actions.oficios({ id: response.data.IdUsuario });
           setRenderComponent();
           setIsLoading(false);
         } else {
           setIsLoading(false);
-          console.log("Not equal");
+          //console.log("Not equal");
         }
       })
       .catch(function(response) {
         //handle error
         setIsLoading(false);
-        console.log(response);
+        //console.log(response);
       });
   };
 
@@ -61,7 +83,7 @@ export default function Login(props) {
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
-        defaultValue="ricardo.lun"
+        defaultValue="ricardo.luna"
         onChange={e => setUser(e.nativeEvent.text)}
         rightIcon={{
           type: "material-community",
@@ -71,10 +93,10 @@ export default function Login(props) {
         errorMessage={error}
       />
       <Input
-        placeholdear="Contraseña"
+        placeholder="Contraseña"
         containerStyle={styles.input}
         password={true}
-        defaultValue="12"
+        defaultValue="123"
         secureTextEntry={hidePassword}
         onChange={e => setPw(e.nativeEvent.text)}
         rightIcon={{
@@ -84,6 +106,15 @@ export default function Login(props) {
           onPress: () => setHidePassword(!hidePassword)
         }}
         errorMessage={null}
+      />
+      <Text style={styles.switch}>Recordar sesión</Text>
+      <Switch
+        style={styles.switch}
+        trackColor={{ false: "#767577", true: "#46babc" }}
+        thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
       />
       <Button
         title="Iniciar sesión"
@@ -128,6 +159,9 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     width: "100%"
+  },
+  switch: {
+    alignSelf: "center"
   },
   btn: {
     backgroundColor: "#404040"

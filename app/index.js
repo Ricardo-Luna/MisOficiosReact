@@ -3,28 +3,35 @@ import { Router, Scene } from "react-native-router-flux";
 
 import Splash from "./screens/Splash";
 import Oficios from "./screens/Oficios";
-import CardView from "./components/Oficios/OficioCardView"
-import Card from "./tests/Card"
+import Documento from "./screens/Documento";
+import CardView from "./components/Oficios/OficioCardView";
+import Card from "./tests/Card";
+import { StyleSheet } from "react-native";
+
 export default App = () => {
-  const [carpetaActual, setCarpetaActual] = useState("Recibidos");
   return (
     <Router>
-      <Scene key="root">
-        <Scene key="splash" component={Splash} back={false} hideNavBar={true}  />
+      <Scene key="root" >
+        <Scene
+          key="splash"
+          component={Splash}
+          back={false}
+          hideNavBar={true}
+          onLeft={true}
+        />
 
         <Scene
           key="oficios"
           renderLeftButton={() => null}
-          setCarpetaActual={setCarpetaActual}
-          title={carpetaActual}
+          title={"Recibidos"}
           component={Oficios}
-          back={false}
           hideNavBar={false}
-          onBack={()=>{console.log("salsipuedes")}}
-          
+          back={true}
+          type="reset"
         />
-        
-      </Scene>  
+
+        <Scene key="documento" hideNavBar={true} component={Documento} />
+      </Scene>
     </Router>
   );
 };
