@@ -20,25 +20,25 @@ export default function Oficios(props) {
     setCarpetas(props.inicio);
   }, []);
   useEffect(() => {
-    const backAction = () => {
-      Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
-        {
-          text: "No",
-          onPress: () => null,
-          style: "cancel",
-        },
-        { text: "Sí", onPress: () => BackHandler.exitApp() },
-      ]);
-      return true;
-    };
+  const backAction = () => {
+    Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
+      {
+        text: "No",
+        onPress: () => null,
+        style: "cancel",
+      },
+      { text: "Sí", onPress: () => BackHandler.exitApp() },
+    ]);
+    return true;
+  };
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+  const backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    backAction
+  );
 
     return () => backHandler.remove();
-  });
+  },[]);
 
   return (
     <View style={styles.buttonsheet}>
@@ -106,14 +106,42 @@ export default function Oficios(props) {
             color="black"
           />
         </ActionButton.Item>
-        <ActionButton.Item title="Cerrar sesión" buttonColor="#f08119">
+        <ActionButton.Item
+          title="Cerrar sesión"
+          buttonColor="#f08119"
+          onPress={() => {
+            Alert.alert(
+              "Cerrar sesión",
+              "Tendrás que ingresar tus credenciales de nuevo",
+              [
+                {
+                  text: "Cancelar",
+                  onPress: () => null,
+                  style: "cancel",
+                },
+                { text: "Salir", onPress: () => Actions.splash() },
+              ]
+            );
+          }}
+        >
           <Icon
             name={"account-arrow-left"}
             backgroundColor="transparent"
             type="material-community"
             color="black"
             onPress={() => {
-              Actions.splash();
+              Alert.alert(
+                "Cerrar sesión",
+                "Tendrás que ingresar tus credenciales de nuevo",
+                [
+                  {
+                    text: "No",
+                    onPress: () => null,
+                    style: "cancel",
+                  },
+                  { text: "Sí", onPress: () => Actions.splash() },
+                ]
+              );
             }}
           />
         </ActionButton.Item>

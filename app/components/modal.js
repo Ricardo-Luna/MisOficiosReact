@@ -3,15 +3,15 @@ import { StyleSheet } from "react-native";
 import { Overlay } from "react-native-elements";
 
 export default function Modal(props) {
-  const { isVisible, setIsVisible,hide, children } = props;
+  const { isVisible, setIsVisible,hide, children,bckgrColor } = props;
 
   const closeModal = () => setIsVisible(!hide);
 
   return (
     <Overlay
       isVisible={isVisible}
-      windowBackgroundColor="rgba(0, 0, 0, 0)"
-      overlayBackgroundColor="rgba(0,0,0,0)"
+      windowBackgroundColor={"rgba(0,0,0,.4)"}
+      overlayBackgroundColor={bckgrColor}
       overlayStyle={styles.overlay}
       onBackdropPress={closeModal}
     >

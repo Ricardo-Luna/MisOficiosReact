@@ -29,7 +29,7 @@ export default function Splash() {
   };
 
   useEffect(() => {
-    console.log(`logged: ${isLogged}`);
+   // console.log(`logged: ${isLogged}`);
     
     setRenderComponent(false);    
     setIsVisibleModal(false);
@@ -149,6 +149,7 @@ export default function Splash() {
             <SesionForm
               setRenderComponent={setRenderComponent}
               setIsLogged={setIsLogged}
+              bckgrColor={"rgba(0, 0, 0, 0)"}
             />
           }
         </Modal>

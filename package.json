@@ -29,7 +29,8 @@
     "react-native-router-flux": "^4.2.0",
     "react-native-screens": "^2.2.0",
     "react-native-web": "~0.11.7",
-    "react-native-webview": "^9.0.2"
+    "react-native-webview": "^9.2.1",
+    "rn-sliding-button": "^1.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

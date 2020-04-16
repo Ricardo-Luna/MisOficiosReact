@@ -38,7 +38,7 @@ export default function Login(props) {
           //console.log(responseJson);
           //setCarpetas(responseJson);
           //console.log(carpetas);
-          console.log(carpeta);
+         // console.log(carpeta);
           // setCarpetaInicial(
           //   responseJson.map.filter((u) => {
           //     u.Nombre === "Recibidos";
@@ -46,14 +46,14 @@ export default function Login(props) {
           // );
           carpetas = responseJson;
           responseJson.map((u, i) => {
-            console.log(isEnabled);
+            //console.log(isEnabled);
 
             setIsLogged(isEnabled);
             //console.log(u.Nombre);
             if (u.Nombre === "Recibidos") {
               setCarpetaInicial(u.IdCarpeta);
               carpeta = u.IdCarpeta;
-              console.log(`carpeta ${carpeta}`);
+          //    console.log(`carpeta ${carpeta}`);
             }
           });
         })
@@ -95,7 +95,7 @@ export default function Login(props) {
       .catch(function (response) {
         //handle error
         setIsLoading(false);
-        console.log(response);
+       // console.log(response);
       });
   };
 

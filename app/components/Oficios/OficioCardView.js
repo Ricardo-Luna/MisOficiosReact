@@ -9,6 +9,7 @@ import Moment from "moment";
 export default function OficiosCardView(props) {
   const [docs, setDocs] = useState([]);
   const [actualizar, setActualizar] = useState([]);
+
   const { carpeta, setLoading } = props;
 
   /*{const fetchDocs = () => {
@@ -42,6 +43,24 @@ export default function OficiosCardView(props) {
         setLoading(false);
       });
   };
+  const fetchDoc = (id) => {
+    fetch(`http://10.0.0.17/ApiMisOficios/api/Documentos/{${id}}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((response) => {
+       // console.log(response);
+        
+        {
+          response.documentoHTML
+            ? Actions.documento({
+                docString: response.documentoHTML,
+              })
+            : console.log("Documento para borrador");
+        }
+      })
+      .then();
+  };
 
   useEffect(() => {
     fetchHttpDocs();
@@ -53,9 +72,18 @@ export default function OficiosCardView(props) {
   return (
     <ScrollView>
       {docs.map((u, i) => {
+        {console.log(u);
+        }
         return (
-          <TouchableOpacity onPress={()=>Actions.documento()
-          }>
+          <TouchableOpacity
+            key={i}
+            onPress={() => {
+              fetchDoc(u.IdDocumento);
+            }}
+          >
+            {
+            //  console.log(u.IdDocumento)
+            }
             <Card key={i}>
               {/*Padre del componente */}
               <View
@@ -63,6 +91,7 @@ export default function OficiosCardView(props) {
                 style={{ flexDirection: "column" }}
               >
                 {/*Elementos header */}
+                
                 <View style={styles.iconsinicio}>
                   {u.Importancia < 3 ? (
                     <Icon
@@ -79,11 +108,12 @@ export default function OficiosCardView(props) {
                       reverseColor="black"
                     />
                   )}
+
                   <Text> </Text>
                   <Text>{u.Codigo}</Text>
-                  <Text> </Text>
+                  <Text> | </Text>
 
-                  <Text> {dateFormater(u.FechaCreacion)} </Text>
+                  <Text> {dateFormater(u.FechaCreacion)} |</Text>
                   <Text> </Text>
                   <View style={styles.iconsfin}>
                     {u.TieneArchivosAdjuntos && (
@@ -101,8 +131,10 @@ export default function OficiosCardView(props) {
                       color="black"
                       reverseColor="black"
                     />
+                  {console.log(u.Asunto+": "+u.Estatus)
+                  }
                     <Icon
-                      name="eye-check"
+                      name={u.Leido === 0 ? "eye-outline" : "eye-check"}
                       type="material-community"
                       color="black"
                       reverseColor="black"

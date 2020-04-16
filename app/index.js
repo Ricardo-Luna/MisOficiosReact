@@ -11,7 +11,8 @@ import { StyleSheet } from "react-native";
 export default App = () => {
   return (
     <Router>
-      <Scene key="root" >
+      <Scene key="root">
+        
         <Scene
           key="splash"
           component={Splash}
@@ -27,10 +28,9 @@ export default App = () => {
           component={Oficios}
           hideNavBar={false}
           back={false}
-          
         />
 
-        <Scene key="documento" hideNavBar={true} component={Documento} />
+        <Scene key="documento" back={true} component={Documento} />
       </Scene>
     </Router>
   );
