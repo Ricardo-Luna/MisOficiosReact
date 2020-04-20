@@ -3,7 +3,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Card, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-
+import axios from "react-native-axios";
 import Moment from "moment";
 
 export default function OficiosCardView(props) {
@@ -12,21 +12,23 @@ export default function OficiosCardView(props) {
 
   const { carpeta, setLoading } = props;
 
-  /*{const fetchDocs = () => {
+  const fetchDocs = async () => {
     axios
       .get(
         `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`
       )
-      .then(response => {
-        setDocs(response["Documentos"]);
+      .then((response) => {
+        console.log(response.data.Documentos);
+
+        setDocs(response.data.Documentos);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         setLoading(false);
       });
-  };}*/
+  };
 
-  const fetchHttpDocs = () => {
+  const fetchHttpDocs = async () => {
     fetch(
       `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`,
       {
@@ -43,14 +45,14 @@ export default function OficiosCardView(props) {
         setLoading(false);
       });
   };
-  const fetchDoc = (id) => {
+  const fetchDoc = async (id) => {
     fetch(`http://10.0.0.17/ApiMisOficios/api/Documentos/{${id}}`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((response) => {
-       // console.log(response);
-        
+        // console.log(response);
+
         {
           response.documentoHTML
             ? Actions.documento({
@@ -63,7 +65,8 @@ export default function OficiosCardView(props) {
   };
 
   useEffect(() => {
-    fetchHttpDocs();
+    fetchDocs();
+//    fetchHttpDocs();
   }, [carpeta]);
   const dateFormater = (dt) => {
     Moment.locale("en");
@@ -72,7 +75,8 @@ export default function OficiosCardView(props) {
   return (
     <ScrollView>
       {docs.map((u, i) => {
-        {console.log(u);
+        {
+         // console.log(u);
         }
         return (
           <TouchableOpacity
@@ -82,7 +86,7 @@ export default function OficiosCardView(props) {
             }}
           >
             {
-            //  console.log(u.IdDocumento)
+              //  console.log(u.IdDocumento)
             }
             <Card key={i}>
               {/*Padre del componente */}
@@ -91,7 +95,7 @@ export default function OficiosCardView(props) {
                 style={{ flexDirection: "column" }}
               >
                 {/*Elementos header */}
-                
+
                 <View style={styles.iconsinicio}>
                   {u.Importancia < 3 ? (
                     <Icon
@@ -131,8 +135,9 @@ export default function OficiosCardView(props) {
                       color="black"
                       reverseColor="black"
                     />
-                  {console.log(u.Asunto+": "+u.Estatus)
-                  }
+                    {
+                      //console.log(u.Asunto+": "+u.Estatus)
+                    }
                     <Icon
                       name={u.Leido === 0 ? "eye-outline" : "eye-check"}
                       type="material-community"
