@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+//import { ScrollView } from "react-native-gesture-handler";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import { Card, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
@@ -9,17 +16,66 @@ import Moment from "moment";
 export default function OficiosCardView(props) {
   const [docs, setDocs] = useState([]);
   const [actualizar, setActualizar] = useState([]);
-
+  const [loadMore, setLoadMore] = useState(true);
+  const [nextPage, setNextPage] = useState("");
+  const [hasMore, setHasMore] = useState(false);
   const { carpeta, setLoading } = props;
+  const cadenaConexion = "http://10.0.0.17/ApiMisOficios";
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }) => {
+    const paddingToBottom = 20;
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
+  const handleMore = async () => {
+    //if(hasMore){}
+    setLoadMore(true);
+    let httpReq = cadenaConexion + nextPage;
+    console.log(httpReq);
+
+    await axios
+      .get(httpReq)
+      .then((response) => {
+        try {
+          setNextPage((response.data.Siguiente));
+          console.log(nextPage);
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+        
+        setLoadMore(false);
+        const resultDocuments = [...docs, ...response.data.Documentos];
+        setDocs(resultDocuments);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        setLoadMore(false);
+      });
+  };
 
   const fetchDocs = async () => {
     axios
       .get(
-        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`
+        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=8&idcarpeta=${carpeta}`
       )
       .then((response) => {
-        console.log(response.data.Documentos);
+        //console.log(`response.data`);
+        {
+          response.data.Siguiente === "" ? setHasMore(false) : setHasMore(true);
+        }
+        //console.log(hasMore);
 
+        setNextPage(response.data.Siguiente);
+        setLoading(false);
+        setLoadMore(false);
         setDocs(response.data.Documentos);
       })
       .catch((error) => {
@@ -28,23 +84,7 @@ export default function OficiosCardView(props) {
       });
   };
 
-  const fetchHttpDocs = async () => {
-    fetch(
-      `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`,
-      {
-        method: "GET",
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setDocs(responseJson["Documentos"]);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
-  };
+
   const fetchDoc = async (id) => {
     fetch(`http://10.0.0.17/ApiMisOficios/api/Documentos/{${id}}`, {
       method: "GET",
@@ -66,17 +106,29 @@ export default function OficiosCardView(props) {
 
   useEffect(() => {
     fetchDocs();
-//    fetchHttpDocs();
   }, [carpeta]);
   const dateFormater = (dt) => {
     Moment.locale("en");
     return <Text>{Moment(dt).format("d/MM/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
   };
   return (
-    <ScrollView>
+    <ScrollView
+      onScroll={({ nativeEvent }) => {
+        {nextPage && setLoadMore(true)}
+        
+        if (isCloseToBottom(nativeEvent)) {
+          if (nextPage != "") {
+            console.log(hasMore);
+            setLoadMore(false);
+            handleMore();
+          }
+        }
+      }}
+      scrollEventThrottle={400}
+    >
       {docs.map((u, i) => {
         {
-         // console.log(u);
+          // console.log(u);
         }
         return (
           <TouchableOpacity
@@ -164,12 +216,32 @@ export default function OficiosCardView(props) {
           </TouchableOpacity>
         );
       })}
+      <FooterList loadMore={loadMore} />
     </ScrollView>
+
     /* <CardView cardElevation={2} cardMaxElevation={2} cornerRadius={5}>
       <Text>Elevation 0</Text>
     </CardView>*/
   );
+  function FooterList(props) {
+    const { loadMore } = props;
+
+    if (loadMore) {
+      return (
+        <View style={styles.loadingRestaurants}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.notFoundDocuments}>
+          <Text>Mostrados todos los documentos</Text>
+        </View>
+      );
+    }
+  }
 }
+
 const styles = StyleSheet.create({
   iconsinicio: {
     flexDirection: "row",
@@ -197,4 +269,34 @@ const styles = StyleSheet.create({
     fontSize: 10,
     top: 5,
   },
+  notFoundDocuments: {
+    marginTop: 10,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+  loadingRestaurants: {
+    marginTop: 20,
+    alignItems: "center",
+  },
 });
+
+
+
+
+  // const fetchHttpDocs = async () => {
+  //   fetch(
+  //     `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=10&idcarpeta=${carpeta}`,
+  //     {
+  //       method: "GET",
+  //     }
+  //   )
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       setDocs(responseJson["Documentos"]);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       setLoading(false);
+  //     });
+  // };

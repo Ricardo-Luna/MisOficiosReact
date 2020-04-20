@@ -12,33 +12,33 @@ import Loading from "../components/Loading";
 export default function Oficios(props) {
   const [carpetas, setCarpetas] = useState(props.inicio);
   //const [carpetaInicial, setcarpetaInicial] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const refRBSheet = useRef();
 
   useEffect(() => {
-    setLoading(false);
+    //setLoading(false);
     setCarpetas(props.inicio);
   }, []);
   useEffect(() => {
-  const backAction = () => {
-    Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
-      {
-        text: "No",
-        onPress: () => null,
-        style: "cancel",
-      },
-      { text: "Sí", onPress: () => BackHandler.exitApp() },
-    ]);
-    return true;
-  };
+    const backAction = () => {
+      Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
+        {
+          text: "No",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "Sí", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
 
-  const backHandler = BackHandler.addEventListener(
-    "hardwareBackPress",
-    backAction
-  );
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
 
     return () => backHandler.remove();
-  },[]);
+  }, []);
 
   return (
     <View style={styles.buttonsheet}>
@@ -63,6 +63,7 @@ export default function Oficios(props) {
           <Carpetas
             setCarpetaID={setCarpetas}
             IdUsuario={props.id}
+            loading={setLoading}
             carpetasCompleta={props.carpeta}
           />
         </RBSheet>
@@ -129,20 +130,6 @@ export default function Oficios(props) {
             backgroundColor="transparent"
             type="material-community"
             color="black"
-            onPress={() => {
-              Alert.alert(
-                "Cerrar sesión",
-                "Tendrás que ingresar tus credenciales de nuevo",
-                [
-                  {
-                    text: "No",
-                    onPress: () => null,
-                    style: "cancel",
-                  },
-                  { text: "Sí", onPress: () => Actions.splash() },
-                ]
-              );
-            }}
           />
         </ActionButton.Item>
       </ActionButton>
