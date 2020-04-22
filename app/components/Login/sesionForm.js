@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Switch, View, Text } from "react-native";
+import { StyleSheet, Switch, View, Text, AsyncStorage } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Toast from "react-native-easy-toast";
+//import AsyncStorage from "@react-native-community/async-storage";
 
 export default function Login(props) {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -16,7 +17,7 @@ export default function Login(props) {
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [permiso, setPermiso] = useState(false);
-  const { setRenderComponent, setIsLogged } = props;
+  const { setRenderComponent } = props;
   const toastRef = useRef();
   const credenciales = {
     NickName: user,
@@ -25,35 +26,48 @@ export default function Login(props) {
     DerechosRangoInicial: 1000,
     DerechosRangoFinal: 1012,
   };
+
+  const storeData = async (id, pw) => {
+    try {
+      await AsyncStorage.setItem("@nickname", id);
+      await AsyncStorage.setItem("@pw", pw);
+      await AsyncStorage.setItem("@isSet", isEnabled);
+      await AsyncStorage.setItem("@carpeta", isEnabled);
+      console.log("Sucessfully");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@testKey");
+      if (value !== null) {
+        console.log(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   var carpeta = "",
     id = "",
     carpetas = "";
-  const getCarpetas = (usuario) => {
+  const getCarpetas = async (usuario) => {
     {
-      fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${usuario}`, {
-        method: "GET",
-      })
+      await fetch(
+        `http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${usuario}`,
+        {
+          method: "GET",
+        }
+      )
         .then((response) => response.json())
         .then((responseJson) => {
-          //console.log(responseJson);
-          //setCarpetas(responseJson);
-          //console.log(carpetas);
-         // console.log(carpeta);
-          // setCarpetaInicial(
-          //   responseJson.map.filter((u) => {
-          //     u.Nombre === "Recibidos";
-          //   })
-          // );
           carpetas = responseJson;
           responseJson.map((u, i) => {
-            //console.log(isEnabled);
-
-            setIsLogged(isEnabled);
-            //console.log(u.Nombre);
             if (u.Nombre === "Recibidos") {
               setCarpetaInicial(u.IdCarpeta);
               carpeta = u.IdCarpeta;
-          //    console.log(`carpeta ${carpeta}`);
+              AsyncStorage.setItem("@carpeta", u.IdCarpeta);
             }
           });
         })
@@ -72,30 +86,24 @@ export default function Login(props) {
     }
   };
 
-  const loginAxios = (callback) => {
-    axios({
+  const loginAxios = async () => {
+    await axios({
       method: "post",
       url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
       data: credenciales,
       headers: { "Content-Type": "application/json" },
     })
       .then(function (response) {
-        //handle success
-
         if (response.data.Permisos[0].NumeroPermiso === 1000) {
-          //  console.log(response.data.IdUsuario);
           getCarpetas(response.data.IdUsuario);
           id = response.data.IdUsuario;
+          storeData(response.data.IdUsuario);
         } else {
           setIsLoading(false);
-          //console.log("Not equal");
         }
       })
-
       .catch(function (response) {
-        //handle error
         setIsLoading(false);
-       // console.log(response);
       });
   };
 

@@ -22,7 +22,7 @@ export default function firmar(props) {
       /> 
       <Text style={styles.bienvenido}>Bienvenido a mi nuebo post</Text>
      />*/}
-    <Text >Introducir credenciales</Text>
+      <Text style={styles.txt}>Introducir credenciales para firmar</Text>
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
@@ -57,20 +57,19 @@ export default function firmar(props) {
         loading={isLoading}
         onPress={() => {
           console.log("Firmando");
-          
         }}
       />
     </View>
   );
 }
 const styles = StyleSheet.create({
-  modal: {backgroundColor:"#fff"},
+  modal: { backgroundColor: "#fff" },
   logo: {
     width: "100%",
     height: 150,
   },
-  txt:{
-   // color="#404040"
+  txt: {
+   
   },
   bienvenido: {
     fontFamily: "sans-serif-light",
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   input: {
     marginTop: 10,
     backgroundColor: "rgba(0, 0, 0, 0)",
-    color:"white"
+    // color:"white"
   },
   container: {
     marginTop: 20,
