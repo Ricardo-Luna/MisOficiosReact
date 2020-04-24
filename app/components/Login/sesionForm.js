@@ -4,6 +4,7 @@ import { Input, Button, Image } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Toast from "react-native-easy-toast";
+import fn from "./login";
 //import AsyncStorage from "@react-native-community/async-storage";
 
 export default function Login(props) {
@@ -27,27 +28,18 @@ export default function Login(props) {
     DerechosRangoFinal: 1012,
   };
 
-  const storeData = async (id, pw) => {
+  const storeData = async () => {
     try {
-      await AsyncStorage.setItem("@nickname", id);
+      var flag = isEnabled.toString();
+      await AsyncStorage.setItem("@nickname", user);
       await AsyncStorage.setItem("@pw", pw);
-      await AsyncStorage.setItem("@isSet", isEnabled);
-      await AsyncStorage.setItem("@carpeta", isEnabled);
-      console.log("Sucessfully");
+      await AsyncStorage.setItem("@isSet", flag);
     } catch (e) {
       console.log(e);
     }
   };
-  getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("@testKey");
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
+
+  
 
   var carpeta = "",
     id = "",
@@ -72,13 +64,13 @@ export default function Login(props) {
           });
         })
         .then(() => {
+          setIsLoading(false);
           Actions.oficios({
             id: id,
             inicio: carpeta,
             carpeta: carpetas,
           });
           setRenderComponent();
-          setIsLoading(false);
         })
         .catch((error) => {
           console.error(error);
@@ -97,7 +89,7 @@ export default function Login(props) {
         if (response.data.Permisos[0].NumeroPermiso === 1000) {
           getCarpetas(response.data.IdUsuario);
           id = response.data.IdUsuario;
-          storeData(response.data.IdUsuario);
+          AsyncStorage.setItem("@idUser", id);
         } else {
           setIsLoading(false);
         }
@@ -159,6 +151,9 @@ export default function Login(props) {
         buttonStyle={styles.btn}
         loading={isLoading}
         onPress={() => {
+          {
+            isEnabled && storeData();
+          }
           setIsLoading(true);
           loginAxios();
         }}

@@ -1,6 +1,13 @@
 import React, { Component, useEffect, useState, useRef } from "react";
 import { Icon } from "react-native-elements";
-import { View, StyleSheet, Button, Alert, BackHandler } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Button,
+  Alert,
+  BackHandler,
+  AsyncStorage,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import ActionButton from "react-native-action-button";
 import { Actions } from "react-native-router-flux";
@@ -8,17 +15,23 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import OficiosCardView from "../components/Oficios/OficioCardView";
 import Carpetas from "../components/Carpetas/Carpetas";
 import Loading from "../components/Loading";
+import Modal from "../components/Modal";
+import SesionForm from "../components/Login/sesionForm";
 
 export default function Oficios(props) {
   const [carpetas, setCarpetas] = useState(props.inicio);
   //const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(true);
   const refRBSheet = useRef();
+  const [renderComponent, setRenderComponent] = useState(false);
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
 
   useEffect(() => {
-    //setLoading(false);
-    setCarpetas(props.inicio);
+    setRenderComponent(false);
+    setIsVisibleModal(false);
   }, []);
+
+
   useEffect(() => {
     const backAction = () => {
       Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
@@ -120,7 +133,14 @@ export default function Oficios(props) {
                   onPress: () => null,
                   style: "cancel",
                 },
-                { text: "Salir", onPress: () => Actions.splash() },
+                {
+                  text: "Salir",
+                  onPress: () => {
+                    var flag = "false"
+                    AsyncStorage.setItem("@isSet", flag);
+                    Actions.splash();
+                  },
+                },
               ]
             );
           }}

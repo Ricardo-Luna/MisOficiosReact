@@ -12,6 +12,7 @@ import Toast from "react-native-easy-toast";
 import Modal from "../components/Modal";
 import SesionForm from "../components/Login/sesionForm";
 import { Actions } from "react-native-router-flux";
+import Loading from "../components/Loading";
 const screenHeight = Math.round(Dimensions.get("window").height);
 const screenwidth = Math.round(Dimensions.get("window").width);
 //import AsyncStorage from "@react-native-community/async-storage";
@@ -19,29 +20,39 @@ const screenwidth = Math.round(Dimensions.get("window").width);
 export default function Splash() {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState("");
+  const [pw, setPw] = useState("");
+  const [idUs, setIdUs] = useState("");
+  const [carpeta, setCarpeta] = useState("");
+  const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
 
   state = {
     ready: false,
     slideUpValue: new Animated.Value(0),
   };
-  const storeData = async () => {
+
+  const getData = async () => {
     try {
-      await AsyncStorage.setItem("@testKey", "Funcionó correctamente");
+      var us = await AsyncStorage.getItem("@nickname");
+      var pw = await AsyncStorage.getItem("@pw");
+      var st = await AsyncStorage.getItem("@isSet");
+      var cp = await AsyncStorage.getItem("@carpeta");
+      var id = await AsyncStorage.getItem("@idUser");
+      setUser(us);
+      setPw(pw);
+      setCarpeta(cp);
+      setIsLogged(st);
+      setIdUs(id);
+      if (pw === "true") {
+        setLoading(true);
+      }
     } catch (e) {
       console.log(e);
     }
   };
-  const getData = async () => {
-    try {
-      const isLogged = await AsyncStorage.getItem("@isSet");
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
+
   _start = () => {
     return Animated.parallel([
       Animated.timing(state.slideUpValue, {
@@ -53,23 +64,31 @@ export default function Splash() {
   };
 
   useEffect(() => {
-    
-    //getData();
-    setRenderComponent(false);
-    setIsVisibleModal(false);
-    setTimeout(() => {
-     // Actions.oficios()
-      setRenderComponent(true);
-      setIsVisibleModal(true);
-      _start();
-    }, 2000);
+    setTimeout(
+      () => {
+        if (isLogged == "true" || null) {
+          Actions.oficios({
+            id: idUs,
+            inicio: carpeta,
+            //   carpeta: carpetas,
+          });
+          setRenderComponent(false);
+          setIsVisibleModal(false);
+          setLoading(false);
+        } else {
+          setRenderComponent(true);
+          setIsVisibleModal(true);
+          _start();
+        }
+      },
+      // Actions.oficios()
+      2000
+    );
+  }, [isLogged]);
+
+  useEffect(() => {
+    getData();
   }, []);
-  //useEffect(() => {
-  //  setTimeout(() => {
-  //    setIsVisibleModal(false)
-  //    setRenderComponent(false);
-  //  }, 1500);
-  //}, [Animated.parallel])
 
   let { slideUpValue, fadeValue, SlideInLeft } = state;
   return (
@@ -108,6 +127,7 @@ export default function Splash() {
           style={styles.logo}
           resizeMode="contain"
         />
+
         <Text style={styles.text}>Mis Oficios</Text>
       </Animated.View>
 
