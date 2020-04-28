@@ -12,12 +12,12 @@ import Toast from "react-native-easy-toast";
 import Modal from "../components/modal";
 import SesionForm from "../components/Login/sesionForm";
 import { Actions } from "react-native-router-flux";
+import LoginAxios from "../components/Login/login";
 import Loading from "../components/Loading";
 const screenHeight = Math.round(Dimensions.get("window").height);
 const screenwidth = Math.round(Dimensions.get("window").width);
-//import AsyncStorage from "@react-native-community/async-storage";
 
-export default function Splash() {
+export default function Splash(props) {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -27,13 +27,8 @@ export default function Splash() {
   const [carpeta, setCarpeta] = useState("");
   const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
-
-  state = {
-    ready: false,
-    slideUpValue: new Animated.Value(0),
-  };
-
-  const getData = async (callback) => {
+  //Fixin this
+  const getData = async () => {
     try {
       var us = await AsyncStorage.getItem("@nickname");
       var pw = await AsyncStorage.getItem("@pw");
@@ -45,12 +40,25 @@ export default function Splash() {
       setCarpeta(cp);
       setIsLogged(st);
       setIdUs(id);
-      if (pw === "true") {
-    //    callback();
-        setLoading(st);
+      console.log(st);
+
+      if (st == "true") {
+        setLoading(true);
+        LoginAxios(us,pw)
+
+        //  Actions.oficios({
+        //    id: idUs,
+        //    inicio: carpeta,
+        //    carpeta: carpetas,
+        //  });
+      } else {
+        setRenderComponent(true);
+        setIsVisibleModal(true);
       }
     } catch (e) {
       console.log(e);
+      setRenderComponent(true);
+      setIsVisibleModal(true);
     }
   };
   var carpetas;
@@ -66,7 +74,7 @@ export default function Splash() {
           .then((response) => response.json())
           .then((responseJson) => {
             carpetas = responseJson;
-            console.log(carpetas);
+            //  console.log(carpetas);
             try {
               carpetas.map((u) => {
                 if (u.Nombre === "Recibidos") {
@@ -79,7 +87,6 @@ export default function Splash() {
             }
           })
           .then(() => {
-            // setIsLoading(false);
             Actions.oficios({
               id: idUs,
               inicio: carpeta,
@@ -95,6 +102,47 @@ export default function Splash() {
       }
     }
   };
+  //-----------------------------------------
+  useEffect(() => {
+    getData();
+    setTimeout(
+      () => {
+        //if (isLogged == "true" || null) {
+        //setRenderComponent(false);
+        //setIsVisibleModal(false);
+        //setLoading(false);
+        //  } else {
+
+        _start();
+
+        // }
+      },
+      // Actions.oficios()
+      1000
+    );
+  }, []);
+
+  //-------------------------------------------
+
+  //useEffect(() => {
+  //  console.log(isLogged);
+  //  {
+  //    isLogged === "false" && LoginAxios(user, pw);
+  //    //setRenderComponent(false);
+  //    //setIsVisibleModal(false);
+  //  }
+  //  // LoginAxios("ricardo.luna", "123");
+  //}, [isLogged]);
+
+  //--------------------------------------------
+
+  //-------------------------------------------------------
+
+  state = {
+    ready: false,
+    slideUpValue: new Animated.Value(0),
+  };
+  let { slideUpValue, fadeValue, SlideInLeft } = state;
   _start = () => {
     return Animated.parallel([
       Animated.timing(state.slideUpValue, {
@@ -104,36 +152,6 @@ export default function Splash() {
       }),
     ]).start();
   };
-
-  useEffect(() => {
-    setTimeout(
-      () => {
-        if (isLogged == "true" || null) {
-          // getCarpetas(idUs);
-          // Actions.oficios({
-          //   id: idUs,
-          //   inicio: carpeta,
-             //   carpeta: carpetas,
-          // });
-          setRenderComponent(false);
-          setIsVisibleModal(false);
-          setLoading(false);
-        } else {
-          setRenderComponent(true);
-          setIsVisibleModal(true);
-          _start();
-        }
-      },
-      // Actions.oficios()
-      2000
-    );
-  }, [isLogged]);
-
-  useEffect(() => {
-    getData(getCarpetas());
-  }, []);
-
-  let { slideUpValue, fadeValue, SlideInLeft } = state;
   return (
     <View style={styles.splash}>
       <Image
@@ -236,6 +254,7 @@ export default function Splash() {
           {
             <SesionForm
               setRenderComponent={setRenderComponent}
+              setIsVisible={setIsVisibleModal}
               bckgrColor={"rgba(0, 0, 0, 0)"}
             />
           }

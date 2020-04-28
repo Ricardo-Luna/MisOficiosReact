@@ -3,8 +3,7 @@ import { StyleSheet, Switch, View, Text, AsyncStorage } from "react-native";
 import { Input, Button, Image } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
-import Toast from "react-native-easy-toast";
-import fn from "./login";
+import LoginAxios from "../Login/login";
 //import AsyncStorage from "@react-native-community/async-storage";
 
 export default function Login(props) {
@@ -17,9 +16,7 @@ export default function Login(props) {
   const [user, setUser] = useState("ricardo.luna");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [permiso, setPermiso] = useState(false);
-  const { setRenderComponent } = props;
-  const toastRef = useRef();
+  const { setRenderComponent, setIsVisible } = props;
   const credenciales = {
     NickName: user,
     Password: pw,
@@ -27,7 +24,6 @@ export default function Login(props) {
     DerechosRangoInicial: 1000,
     DerechosRangoFinal: 1012,
   };
-
   const storeData = async () => {
     try {
       var flag = isEnabled.toString();
@@ -38,8 +34,6 @@ export default function Login(props) {
       console.log(e);
     }
   };
-
-  
 
   var carpeta = "",
     id = "",
@@ -108,7 +102,6 @@ export default function Login(props) {
       /> 
       <Text style={styles.bienvenido}>Bienvenido a mi nuebo post</Text>
      />*/}
-
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
@@ -156,6 +149,7 @@ export default function Login(props) {
           }
           setIsLoading(true);
           loginAxios();
+          //LoginAxios(user,pw);
         }}
       />
     </View>
