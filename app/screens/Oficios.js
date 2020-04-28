@@ -15,7 +15,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import OficiosCardView from "../components/Oficios/OficioCardView";
 import Carpetas from "../components/Carpetas/Carpetas";
 import Loading from "../components/Loading";
-import Modal from "../components/Modal";
+//import Modal from "../components/Modal";
 import SesionForm from "../components/Login/sesionForm";
 
 export default function Oficios(props) {

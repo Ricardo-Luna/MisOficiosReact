@@ -9,7 +9,7 @@ import {
 import HTML from "react-native-render-html";
 import Firmar from "../components/Firmar/Firmar"
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
-import Modal from "../components/Modal";
+import Modal from "../components/modal";
 import SesionForm from "../components/Login/sesionForm";
 
 

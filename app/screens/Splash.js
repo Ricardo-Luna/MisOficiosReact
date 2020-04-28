@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Image } from "react-native-elements";
 import Toast from "react-native-easy-toast";
-import Modal from "../components/Modal";
+import Modal from "../components/modal";
 import SesionForm from "../components/Login/sesionForm";
 import { Actions } from "react-native-router-flux";
 import Loading from "../components/Loading";
@@ -33,7 +33,7 @@ export default function Splash() {
     slideUpValue: new Animated.Value(0),
   };
 
-  const getData = async () => {
+  const getData = async (callback) => {
     try {
       var us = await AsyncStorage.getItem("@nickname");
       var pw = await AsyncStorage.getItem("@pw");
@@ -46,13 +46,55 @@ export default function Splash() {
       setIsLogged(st);
       setIdUs(id);
       if (pw === "true") {
-        setLoading(true);
+    //    callback();
+        setLoading(st);
       }
     } catch (e) {
       console.log(e);
     }
   };
-
+  var carpetas;
+  const getCarpetas = async () => {
+    {
+      try {
+        await fetch(
+          `http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${idUs}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            carpetas = responseJson;
+            console.log(carpetas);
+            try {
+              carpetas.map((u) => {
+                if (u.Nombre === "Recibidos") {
+                  setCarpeta(u.IdCarpeta);
+                  AsyncStorage.setItem("@carpeta", u.IdCarpeta);
+                }
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          })
+          .then(() => {
+            // setIsLoading(false);
+            Actions.oficios({
+              id: idUs,
+              inicio: carpeta,
+              carpeta: carpetas,
+            });
+            setRenderComponent();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   _start = () => {
     return Animated.parallel([
       Animated.timing(state.slideUpValue, {
@@ -67,11 +109,12 @@ export default function Splash() {
     setTimeout(
       () => {
         if (isLogged == "true" || null) {
-          Actions.oficios({
-            id: idUs,
-            inicio: carpeta,
-            //   carpeta: carpetas,
-          });
+          // getCarpetas(idUs);
+          // Actions.oficios({
+          //   id: idUs,
+          //   inicio: carpeta,
+             //   carpeta: carpetas,
+          // });
           setRenderComponent(false);
           setIsVisibleModal(false);
           setLoading(false);
@@ -87,7 +130,7 @@ export default function Splash() {
   }, [isLogged]);
 
   useEffect(() => {
-    getData();
+    getData(getCarpetas());
   }, []);
 
   let { slideUpValue, fadeValue, SlideInLeft } = state;

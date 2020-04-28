@@ -26,7 +26,7 @@ export default function Carpetas(props) {
           );
         })
       ) : (
-        <Text> Lista vacía </Text>
+        <Text> No hay carpetas para cargar </Text>
       )}
     </ScrollView>
   );
