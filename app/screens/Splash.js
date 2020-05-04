@@ -44,7 +44,7 @@ export default function Splash(props) {
 
       if (st == "true") {
         setLoading(true);
-        LoginAxios(us,pw)
+        LoginAxios(us, pw);
 
         //  Actions.oficios({
         //    id: idUs,

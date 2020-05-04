@@ -4,6 +4,7 @@ import { Router, Scene } from "react-native-router-flux";
 import Splash from "./screens/Splash";
 import Oficios from "./screens/Oficios";
 import Documento from "./screens/Documento";
+import CustomNavBar from './components/CustomNavBar'
 import CardView from "./components/Oficios/OficioCardView";
 import Card from "./tests/Card";
 import { StyleSheet } from "react-native";
@@ -26,6 +27,7 @@ export default App = () => {
           renderLeftButton={() => null}
           title={"Recibidos"}
           component={Oficios}
+         // navBar={CustomNavBar}
           hideNavBar={false}
           back={false}
         />
