@@ -26,7 +26,7 @@ const screenwidth = Math.round(Dimensions.get("window").width) / 2;
 
 export default function Oficios(props) {
   const [carpetas, setCarpetas] = useState(props.inicio);
-  const [busqueda, setBusqueda] = useState("")
+  const [busqueda, setBusqueda] = useState("");
   //const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(true);
   const refRBSheet = useRef();
@@ -64,7 +64,11 @@ export default function Oficios(props) {
   return (
     <View style={styles.buttonsheet}>
       <View style={styles.cardview}>
-        <OficiosCardView busqueda={busqueda} carpeta={carpetas} setLoading={setLoading} />
+        <OficiosCardView
+          busqueda={busqueda}
+          carpeta={carpetas}
+          setLoading={setLoading}
+        />
         <RBSheet
           style={styles.buttonsheet}
           ref={refRBSheet}
@@ -83,6 +87,7 @@ export default function Oficios(props) {
         >
           <Carpetas
             setCarpetaID={setCarpetas}
+            refRBSheet={refRBSheet}
             IdUsuario={props.id}
             loading={setLoading}
             carpetasCompleta={props.carpeta}
@@ -109,6 +114,7 @@ export default function Oficios(props) {
             <ListItem
               title={"Salir"}
               onPress={() => {
+                refRBSheetOp.current.close();
                 Alert.alert(
                   "Cerrar sesión",
                   "Tendrás que ingresar tus credenciales de nuevo",
@@ -142,19 +148,21 @@ export default function Oficios(props) {
           <View style={styles.inView}>
             {inputShow ? (
               <Input
-              onChange={(e) => setBusqueda(e.nativeEvent.text)}
+                onChange={(e) => setBusqueda(e.nativeEvent.text)}
                 leftIcon={{
                   type: "material-community",
                   name: "close-circle",
                   color: "gray",
-                  onPress: () =>{ setInputShow(!inputShow)
-                  setBusqueda("")}
+                  onPress: () => {
+                    setInputShow(!inputShow);
+                    setBusqueda("");
+                  },
                 }}
               />
             ) : (
               <View style={styles.innerView}>
                 <Icon
-                  name={"comment-search-outline"}
+                  name={"magnify"}
                   type="material-community"
                   style={styles.iconSearch}
                   color="gray"

@@ -50,15 +50,30 @@ export default function firmar(props) {
         }}
         errorMessage={null}
       />
-      <Button
-        title="Firmar"
-        containerStyle={styles.container}
-        buttonStyle={styles.btn}
-        loading={isLoading}
-        onPress={() => {
-          console.log("Firmando");
-        }}
-      />
+      <View style={styles.container}>
+        <View style={styles.button}>
+          <Button
+            title="Firmar"
+          //  containerStyle={styles.button}
+            buttonStyle={styles.btn}
+            loading={isLoading}
+            onPress={() => {
+              //   console.log("Firmando");
+            }}
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title="Cancelar"
+          //  containerStyle={styles.button}
+            buttonStyle={styles.btn}
+            loading={isLoading}
+            onPress={() => {
+              //   console.log("Firmando");
+            }}
+          />
+        </View>
+      </View>
     </View>
   );
 }
@@ -68,9 +83,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 150,
   },
-  txt: {
-   
-  },
+  txt: {},
   bienvenido: {
     fontFamily: "sans-serif-light",
     textAlign: "center",
@@ -91,10 +104,14 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     width: "100%",
+    flexDirection: "row",
   },
   container: {
     marginTop: 20,
     width: "100%",
+  },
+  button: {
+    width: "30%",
   },
   switch: {
     alignSelf: "center",

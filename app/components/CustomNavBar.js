@@ -15,7 +15,7 @@ export default class CustomNavBar extends Component {
         <Divider style={styles.div} height={5} />
         <View style={styles.inView}>
           <Icon
-            name={"comment-search-outline"}
+            name={"card-search-outline"}
             type="material-community"
             style={styles.iconSearch}
             color="gray"

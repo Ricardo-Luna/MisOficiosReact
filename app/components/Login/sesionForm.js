@@ -31,7 +31,7 @@ export default function Login(props) {
       await AsyncStorage.setItem("@pw", pw);
       await AsyncStorage.setItem("@isSet", flag);
     } catch (e) {
-      console.log(e);
+     // console.log(e);
     }
   };
 

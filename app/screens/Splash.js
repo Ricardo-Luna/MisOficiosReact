@@ -40,7 +40,7 @@ export default function Splash(props) {
       setCarpeta(cp);
       setIsLogged(st);
       setIdUs(id);
-      console.log(st);
+      //console.log(st);
 
       if (st == "true") {
         setLoading(true);
@@ -56,7 +56,7 @@ export default function Splash(props) {
         setIsVisibleModal(true);
       }
     } catch (e) {
-      console.log(e);
+      //console.log(e);
       setRenderComponent(true);
       setIsVisibleModal(true);
     }
@@ -83,7 +83,7 @@ export default function Splash(props) {
                 }
               });
             } catch (error) {
-              console.log(error);
+              //console.log(error);
             }
           })
           .then(() => {
@@ -98,7 +98,7 @@ export default function Splash(props) {
             console.error(error);
           });
       } catch (error) {
-        console.log(error);
+       // console.log(error);
       }
     }
   };

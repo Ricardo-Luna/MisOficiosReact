@@ -7,7 +7,7 @@ import { Actions } from "react-native-router-flux";
 export default function Carpetas(props) {
   //console.log(props);
 
-  const { setCarpetaID, IdUsuario, carpetasCompleta, loading } = props;
+  const { setCarpetaID, IdUsuario, carpetasCompleta, loading, refRBSheet } = props;
 
   return (
     <ScrollView>
@@ -18,6 +18,7 @@ export default function Carpetas(props) {
               key={i}
               title={u.Nombre}
               onPress={() => {
+                refRBSheet.current.close()
                 loading(true);
                 setCarpetaID(u.IdCarpeta);
                 Actions.refresh({ title: u.Nombre });

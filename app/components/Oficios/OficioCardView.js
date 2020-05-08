@@ -37,13 +37,13 @@ export default function OficiosCardView(props) {
     //if(hasMore){}
     setLoadMore(true);
     let httpReq = cadenaConexion + nextPage;
-    console.log(httpReq);
+   // console.log(httpReq);
     await axios
       .get(httpReq)
       .then((response) => {
         try {
           setNextPage(response.data.Siguiente);
-          console.log(nextPage);
+          //console.log(nextPage);
         } catch (error) {
           console.log(error);
         }
@@ -102,8 +102,7 @@ export default function OficiosCardView(props) {
   };
 
   useEffect(() => {
-    console.log(props);
-
+    //console.log(props);
     fetchDocs();
   }, [carpeta, busqueda]);
   const dateFormater = (dt) => {
@@ -192,7 +191,7 @@ export default function OficiosCardView(props) {
                       //console.log(u.Asunto+": "+u.Estatus)
                     }
                     <Icon
-                      name={u.Leido === 0 ? "eye-outline" : "eye-check"}
+                      name={u.Estatus === 0 ? "eye-outline" : "eye-check"}
                       type="material-community"
                       color="black"
                       reverseColor="black"
@@ -236,7 +235,7 @@ export default function OficiosCardView(props) {
     } else {
       return (
         <View style={styles.notFoundDocuments}>
-          <Text>Mostrados todos los documentos</Text>
+          <Text>Fin de la lista</Text>
         </View>
       );
     }
