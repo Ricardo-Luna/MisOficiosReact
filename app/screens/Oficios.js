@@ -25,6 +25,8 @@ const screenHeight = Math.round(Dimensions.get("window").height) / 10;
 const screenwidth = Math.round(Dimensions.get("window").width) / 2;
 
 export default function Oficios(props) {
+  console.log(props);
+  
   const [carpetas, setCarpetas] = useState(props.inicio);
   const [busqueda, setBusqueda] = useState("");
   //const [carpetaInicial, setcarpetaInicial] = useState("");
@@ -66,6 +68,7 @@ export default function Oficios(props) {
       <View style={styles.cardview}>
         <OficiosCardView
           busqueda={busqueda}
+          idUs={props.id}
           carpeta={carpetas}
           setLoading={setLoading}
         />

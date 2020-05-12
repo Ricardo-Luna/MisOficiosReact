@@ -20,7 +20,7 @@ export default function OficiosCardView(props) {
   const [loadMore, setLoadMore] = useState(true);
   const [nextPage, setNextPage] = useState("");
   const [hasMore, setHasMore] = useState(false);
-  const { carpeta, setLoading } = props;
+  const { carpeta, setLoading, idUs } = props;
   const cadenaConexion = "http://10.0.0.17/ApiMisOficios";
   const isCloseToBottom = ({
     layoutMeasurement,
@@ -33,11 +33,13 @@ export default function OficiosCardView(props) {
       contentSize.height - paddingToBottom
     );
   };
+  //console.log(props);
+
   const handleMore = async () => {
     //if(hasMore){}
     setLoadMore(true);
     let httpReq = cadenaConexion + nextPage;
-   // console.log(httpReq);
+    // console.log(httpReq);
     await axios
       .get(httpReq)
       .then((response) => {
@@ -102,7 +104,6 @@ export default function OficiosCardView(props) {
   };
 
   useEffect(() => {
-    //console.log(props);
     fetchDocs();
   }, [carpeta, busqueda]);
   const dateFormater = (dt) => {
@@ -118,7 +119,6 @@ export default function OficiosCardView(props) {
 
         if (isCloseToBottom(nativeEvent)) {
           if (nextPage != "") {
-            console.log(hasMore);
             setLoadMore(false);
             handleMore();
           }
@@ -128,7 +128,7 @@ export default function OficiosCardView(props) {
     >
       {docs.map((u, i) => {
         {
-          // console.log(u);
+          // console.log(docs);
         }
         return (
           <TouchableOpacity
@@ -140,12 +140,13 @@ export default function OficiosCardView(props) {
             {
               //  console.log(u.IdDocumento)
             }
-            <Card key={i}>
+            <Card
+              key={i}
+              title={u.Estatus === 3 ? `● ${u.Asunto}` : `${u.Asunto}`}
+              titleStyle={u.Estatus === 3 ? styles.noLeido : styles.leido}
+            >
               {/*Padre del componente */}
-              <View
-                accessibilityRole="button"
-                style={{ flexDirection: "column" }}
-              >
+              <View accessibilityRole="button" style={styles.noLeido}>
                 {/*Elementos header */}
 
                 <View style={styles.iconsinicio}>
@@ -199,7 +200,9 @@ export default function OficiosCardView(props) {
                   </View>
                 </View>
                 <View>
-                  <Text style={styles.asunto}>{u.Asunto}</Text>
+                  {
+                    // <Text style={styles.asunto}>{u.Asunto}</Text>
+                  }
                 </View>
                 <View style={styles.footerCard}>
                   <Icon
@@ -243,6 +246,17 @@ export default function OficiosCardView(props) {
 }
 
 const styles = StyleSheet.create({
+  leido: {
+    flexDirection: "column",
+    //  fontWeight: "bold",
+    fontSize: 15,
+    //backgroundColor: "cyan",
+  },
+  noLeido: {
+    flexDirection: "column",
+    color: "#1f93db",
+  },
+  titleUnread: {},
   iconsinicio: {
     flexDirection: "row",
     flex: 1,
