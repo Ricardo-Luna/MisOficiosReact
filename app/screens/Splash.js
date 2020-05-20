@@ -35,6 +35,12 @@ export default function Splash(props) {
       var st = await AsyncStorage.getItem("@isSet");
       var cp = await AsyncStorage.getItem("@carpeta");
       var id = await AsyncStorage.getItem("@idUser");
+      //console.log(us);
+      //console.log(pw);
+      //console.log(st);
+      //console.log(cp);
+      //console.log(id);
+
       setUser(us);
       setPw(pw);
       setCarpeta(cp);
@@ -98,7 +104,7 @@ export default function Splash(props) {
             console.error(error);
           });
       } catch (error) {
-       // console.log(error);
+        // console.log(error);
       }
     }
   };

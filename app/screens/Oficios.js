@@ -25,10 +25,10 @@ const screenHeight = Math.round(Dimensions.get("window").height) / 10;
 const screenwidth = Math.round(Dimensions.get("window").width) / 2;
 
 export default function Oficios(props) {
-  console.log(props);
-  
+  //console.log(props);
   const [carpetas, setCarpetas] = useState(props.inicio);
   const [busqueda, setBusqueda] = useState("");
+  const [updateList, setUpdateList] = useState(0);
   //const [carpetaInicial, setcarpetaInicial] = useState("");
   const [loading, setLoading] = useState(true);
   const refRBSheet = useRef();
@@ -36,6 +36,7 @@ export default function Oficios(props) {
   const [inputShow, setInputShow] = useState(false);
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  //console.log(props);
 
   useEffect(() => {
     setRenderComponent(false);
@@ -71,6 +72,8 @@ export default function Oficios(props) {
           idUs={props.id}
           carpeta={carpetas}
           setLoading={setLoading}
+          updateList={updateList}
+          setUpdateList={setUpdateList}
         />
         <RBSheet
           style={styles.buttonsheet}
@@ -93,6 +96,7 @@ export default function Oficios(props) {
             refRBSheet={refRBSheet}
             IdUsuario={props.id}
             loading={setLoading}
+            idActual={carpetas}
             carpetasCompleta={props.carpeta}
           />
         </RBSheet>
@@ -115,7 +119,7 @@ export default function Oficios(props) {
           <View>
             <ListItem title={"Ayuda"} onPress={() => {}} />
             <ListItem
-              title={"Salir"}
+              title={"Cerrar sesión"}
               onPress={() => {
                 refRBSheetOp.current.close();
                 Alert.alert(

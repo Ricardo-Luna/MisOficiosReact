@@ -105,7 +105,7 @@ export default function Login(props) {
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
-        defaultValue="ricardo.luna"
+        defaultValue=""
         onChange={(e) => setUser(e.nativeEvent.text)}
         rightIcon={{
           type: "material-community",
@@ -118,7 +118,7 @@ export default function Login(props) {
         placeholder="Contraseña"
         containerStyle={styles.input}
         password={true}
-        defaultValue="123"
+        defaultValue=""
         secureTextEntry={hidePassword}
         onChange={(e) => setPw(e.nativeEvent.text)}
         rightIcon={{

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Component } from "react";
 //import { ScrollView } from "react-native-gesture-handler";
 import {
   View,
   Text,
+  RefreshControl,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -14,10 +15,11 @@ import axios from "react-native-axios";
 import Moment from "moment";
 
 export default function OficiosCardView(props) {
-  const { busqueda } = props;
+  const { busqueda, updateList, setUpdateList } = props;
   const [docs, setDocs] = useState([]);
-  const [actualizar, setActualizar] = useState([]);
+  // const [actualizar, setActualizar] = useState([])
   const [loadMore, setLoadMore] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [nextPage, setNextPage] = useState("");
   const [hasMore, setHasMore] = useState(false);
   const { carpeta, setLoading, idUs } = props;
@@ -33,8 +35,13 @@ export default function OficiosCardView(props) {
       contentSize.height - paddingToBottom
     );
   };
-  //console.log(props);
 
+  //console.log(props);
+  function wait(timeout) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  }
   const handleMore = async () => {
     //if(hasMore){}
     setLoadMore(true);
@@ -60,6 +67,11 @@ export default function OficiosCardView(props) {
         setLoadMore(false);
       });
   };
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchDocs();
+    wait(2000).then(() => setRefreshing(false));
+  }, [refreshing]);
 
   const fetchDocs = async () => {
     axios
@@ -84,7 +96,7 @@ export default function OficiosCardView(props) {
       });
   };
 
-  const fetchDoc = async (id) => {
+  const fetchDoc = async (id, tipo, status) => {
     fetch(`http://10.0.0.17/ApiMisOficios/api/Documentos/{${id}}`, {
       method: "GET",
     })
@@ -96,6 +108,12 @@ export default function OficiosCardView(props) {
           response.documentoHTML
             ? Actions.documento({
                 docString: response.documentoHTML,
+                tipo: tipo,
+                updateList: updateList,
+                setUpdateList: setUpdateList,
+                id: idUs,
+                IdDoc: id,
+                status: status,
               })
             : console.log("Documento para borrador");
         }
@@ -105,18 +123,18 @@ export default function OficiosCardView(props) {
 
   useEffect(() => {
     fetchDocs();
-  }, [carpeta, busqueda]);
+  }, [carpeta, busqueda, updateList]);
   const dateFormater = (dt) => {
-    Moment.locale("en");
-    return <Text>{Moment(dt).format("d/MM/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
+    Moment.locale("es");
+    return <Text>{Moment(dt).format("D/M/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
   };
+  var checked = "";
   return (
     <ScrollView
       onScroll={({ nativeEvent }) => {
         {
           nextPage && setLoadMore(true);
         }
-
         if (isCloseToBottom(nativeEvent)) {
           if (nextPage != "") {
             setLoadMore(false);
@@ -125,21 +143,25 @@ export default function OficiosCardView(props) {
         }
       }}
       scrollEventThrottle={400}
+      persistentScrollbar={true}
+      snapToOffsets={0,0}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       {docs.map((u, i) => {
-        {
-          // console.log(docs);
+        if (u.Leido === 2 && u.Tipo >= 2) {
+          checked = "eye-check";
+        } else {
+          checked = "eye-off";
         }
         return (
           <TouchableOpacity
             key={i}
             onPress={() => {
-              fetchDoc(u.IdDocumento);
+              fetchDoc(u.IdDocumento, u.Tipo, u.Estatus);
             }}
           >
-            {
-              //  console.log(u.IdDocumento)
-            }
             <Card
               key={i}
               title={u.Estatus === 3 ? `● ${u.Asunto}` : `${u.Asunto}`}
@@ -170,7 +192,13 @@ export default function OficiosCardView(props) {
                   <Text>{u.Codigo}</Text>
                   <Text> | </Text>
 
-                  <Text> {dateFormater(u.FechaCreacion)} |</Text>
+                  <Text>
+                    {" "}
+                    {u.Tipo === 1
+                      ? dateFormater(u.FechaCreacion)
+                      : dateFormater(u.FechaEnvio)}{" "}
+                    |
+                  </Text>
                   <Text> </Text>
                   <View style={styles.iconsfin}>
                     {u.TieneArchivosAdjuntos && (
@@ -181,22 +209,37 @@ export default function OficiosCardView(props) {
                         reverseColor="black"
                       />
                     )}
+                    {u.Tipo === 1 && (
+                      <Icon
+                        name={"playlist-edit"}
+                        type="material-community"
+                        color="black"
+                      />
+                    )}
+                    <Icon
+                      name={
+                        u.Estatus === 2
+                          ? "arrow-up-bold-box-outline"
+                          : "arrow-down-bold-box-outline"
+                      }
+                      type="material-community"
+                      color={u.Estatus === 2 ? "#03c04a" : "#20B2AA"}
+                      reverseColor="black"
+                    />
 
-                    <Icon
-                      name="arrow-down-bold-box-outline"
-                      type="material-community"
-                      color="black"
-                      reverseColor="black"
-                    />
                     {
-                      //console.log(u.Asunto+": "+u.Estatus)
+                      //  console.log(u.IdDocumento)
                     }
-                    <Icon
-                      name={u.Estatus === 0 ? "eye-outline" : "eye-check"}
-                      type="material-community"
-                      color="black"
-                      reverseColor="black"
-                    />
+                    {u.Tipo > 1 && (
+                      <Icon
+                        name={
+                          u.Leido === 2 && u.Tipo >= 2 ? "eye-check" : "eye-off"
+                        }
+                        type="material-community"
+                        color={u.Leido === 2 ? "#20B2AA" : "black"}
+                        reverseColor="black"
+                      />
+                    )}
                   </View>
                 </View>
                 <View>
