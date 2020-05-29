@@ -7,6 +7,7 @@ import {
   Animated,
   AsyncStorage,
 } from "react-native";
+
 import { Image } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import Modal from "../components/modal";
@@ -27,9 +28,11 @@ export default function Splash(props) {
   const [carpeta, setCarpeta] = useState("");
   const [isLogged, setIsLogged] = useState(false);
   const toastRef = useRef();
-  //Fixin this
+  const NetInfo = require("react-native-netinfo");
+
   const getData = async () => {
     try {
+      <Toast ref={toastRef} position="center" opacity={0.7} />;
       var us = await AsyncStorage.getItem("@nickname");
       var pw = await AsyncStorage.getItem("@pw");
       var st = await AsyncStorage.getItem("@isSet");
@@ -40,25 +43,23 @@ export default function Splash(props) {
       //console.log(st);
       //console.log(cp);
       //console.log(id);
-
       setUser(us);
       setPw(pw);
       setCarpeta(cp);
       setIsLogged(st);
       setIdUs(id);
       //console.log(st);
-
       if (st == "true") {
         setLoading(true);
+        toastRef.current.show("Sesión iniciada anteriormente", 2000);
         LoginAxios(us, pw);
-
         //  Actions.oficios({
         //    id: idUs,
         //    inicio: carpeta,
         //    carpeta: carpetas,
         //  });
       } else {
-        setRenderComponent(true);
+        setRenderComponent(asdstrue);
         setIsVisibleModal(true);
       }
     } catch (e) {
@@ -75,7 +76,8 @@ export default function Splash(props) {
           `http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${idUs}`,
           {
             method: "GET",
-          }
+          },
+          { timeout: 3 }
         )
           .then((response) => response.json())
           .then((responseJson) => {
@@ -100,15 +102,20 @@ export default function Splash(props) {
             });
             setRenderComponent();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch(function (error) {
+            if (error.response) {
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            }
           });
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     }
   };
   //-----------------------------------------
+
   useEffect(() => {
     getData();
     setTimeout(
@@ -260,6 +267,7 @@ export default function Splash(props) {
           {
             <SesionForm
               setRenderComponent={setRenderComponent}
+              toastRef={toastRef}
               setIsVisible={setIsVisibleModal}
               bckgrColor={"rgba(0, 0, 0, 0)"}
             />

@@ -10,10 +10,10 @@
       "web"
     ],
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "orientation": "default",
+    "icon": "./assets/icono.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/escudo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

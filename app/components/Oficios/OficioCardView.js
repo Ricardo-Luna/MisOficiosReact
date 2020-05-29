@@ -1,10 +1,11 @@
-import React, { useEffect, useState, Component } from "react";
+import React, { useEffect, useState } from "react";
 //import { ScrollView } from "react-native-gesture-handler";
 import {
   View,
   Text,
   RefreshControl,
   StyleSheet,
+  Dimensions,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
@@ -13,6 +14,7 @@ import { Card, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Moment from "moment";
+const screenHeight = Math.round(Dimensions.get("window").height);
 
 export default function OficiosCardView(props) {
   const { busqueda, updateList, setUpdateList } = props;
@@ -24,6 +26,7 @@ export default function OficiosCardView(props) {
   const [hasMore, setHasMore] = useState(false);
   const { carpeta, setLoading, idUs } = props;
   const cadenaConexion = "http://10.0.0.17/ApiMisOficios";
+  const cardsPerScreen = (screenHeight / 130 - 1).toFixed(0);
   const isCloseToBottom = ({
     layoutMeasurement,
     contentOffset,
@@ -74,9 +77,11 @@ export default function OficiosCardView(props) {
   }, [refreshing]);
 
   const fetchDocs = async () => {
+    console.log(`${screenHeight}, cards per screen ${cardsPerScreen}`);
+
     axios
       .get(
-        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=8&texto=${props.busqueda}&idcarpeta=${carpeta}`
+        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=${cardsPerScreen}&texto=${props.busqueda}&idcarpeta=${carpeta}`
       )
       .then((response) => {
         //console.log(`response.data`);
@@ -102,7 +107,7 @@ export default function OficiosCardView(props) {
     })
       .then((response) => response.json())
       .then((response) => {
-        // console.log(response);
+       
 
         {
           response.documentoHTML
@@ -125,7 +130,8 @@ export default function OficiosCardView(props) {
     fetchDocs();
   }, [carpeta, busqueda, updateList]);
   const dateFormater = (dt) => {
-    Moment.locale("es");
+    var esLocale = require("moment/locale/es");
+    Moment.updateLocale("es", esLocale);
     return <Text>{Moment(dt).format("D/M/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
   };
   var checked = "";
@@ -144,7 +150,6 @@ export default function OficiosCardView(props) {
       }}
       scrollEventThrottle={400}
       persistentScrollbar={true}
-      snapToOffsets={0,0}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -168,7 +173,7 @@ export default function OficiosCardView(props) {
               titleStyle={u.Estatus === 3 ? styles.noLeido : styles.leido}
             >
               {/*Padre del componente */}
-              <View accessibilityRole="button" style={styles.noLeido}>
+              <View style={styles.card}>
                 {/*Elementos header */}
 
                 <View style={styles.iconsinicio}>
@@ -299,7 +304,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     color: "#1f93db",
   },
-  titleUnread: {},
+  card: {
+    height: 55,
+  },
   iconsinicio: {
     flexDirection: "row",
     flex: 1,

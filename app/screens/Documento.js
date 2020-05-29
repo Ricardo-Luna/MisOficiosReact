@@ -19,6 +19,7 @@ export default function Documento(props) {
     setRenderComponent(true);
     setIsVisibleModal(true);
   };
+
   
   const checkRead = () => {
     fetch(
@@ -38,7 +39,7 @@ export default function Documento(props) {
       .catch((response) => console.log(response));
   };
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={styles.scrollStyle}>
       {status <= 3 && checkRead()}
       <HTML
         html={htmlContent}
@@ -90,6 +91,10 @@ const styles = StyleSheet.create({
     width: "100%",
     alignContent: "center",
     flex: 1,
+  },
+  scrollStyle: {
+    flex: 1,
+    //width: "200%",
   },
 });
 //https://reactnativecode.com/create-pdf-file-using-html-text-in-react-native-android-ios-example/

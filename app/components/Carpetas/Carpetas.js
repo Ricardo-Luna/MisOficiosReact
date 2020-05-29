@@ -19,14 +19,13 @@ export default function Carpetas(props) {
   var sub = "";
   return (
     <ScrollView>
-      { console.log(idActual)}
-      {
-       carpetasCompleta ? (
-        carpetasCompleta.map((u, i) => {    
+      {console.log(idActual)}
+      {carpetasCompleta ? (
+        carpetasCompleta.map((u, i) => {
           sub = " ";
           if (idActual === u.IdCarpeta) {
+            // sub =  u.CantidadDocumentos +" "+" ⌵ " + "Carpeta actual";
             sub = " ⌵ " + "Carpeta actual";
-            
           }
           if (u.Enviados) {
             sub = sub + " ◉ " + "Carpeta de enviados";
@@ -41,19 +40,22 @@ export default function Carpetas(props) {
           return (
             <ListItem
               key={i}
-              title={u.Nombre}
+              title={`${u.Nombre}  (${u.CantidadDocumentos})`}
               subtitle={sub}
               linearGradientProps={
-                idActual === u.IdCarpeta &&
-                {
-                colors: ['#99EDC3', '#99EDC3'],
-                start: { x: 1, y: 0 },
-                end: { x: 0.2, y: 0 },
+                idActual === u.IdCarpeta
+                  ? {
+                      colors: ["#99EDC3", "#99EDC3"],
+                      start: { x: 1, y: 0 },
+                      end: { x: 0.2, y: 0 },
+                    }
+                  : {
+                      colors: ["#ffffff", "#ffffff"],
+                      start: { x: 1, y: 0 },
+                      end: { x: 0.2, y: 0 },
+                    }
               }
-
-            }
               onPress={
-
                 idActual === u.IdCarpeta
                   ? () => {
                       console.log("Eso es carcel no no no");

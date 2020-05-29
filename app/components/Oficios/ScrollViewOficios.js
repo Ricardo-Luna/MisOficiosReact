@@ -1,9 +1,126 @@
-import React, { Component } from "react";
-import { ScrollView } from "react-native";
+import React, { Component,useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
+import { Card, Icon } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
+import axios from "react-native-axios";
+import SVMethods from '../Oficios/SVMethods'
+import Moment from "moment";
 export default class ScrollViewOficios extends Component {
   constructor(props) {
     super(props);
+    const { busqueda, updateList, setUpdateList } = props;
+    const [docs, setDocs] = useState([]);
+    // const [actualizar, setActualizar] = useState([])
+    const [loadMore, setLoadMore] = useState(true);
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [nextPage, setNextPage] = useState("");
+    const [hasMore, setHasMore] = useState(false);
+    const { carpeta, setLoading, idUs } = props;
+    const cadenaConexion = "http://10.0.0.17/ApiMisOficios";
+    const isCloseToBottom = ({
+      layoutMeasurement,
+      contentOffset,
+      contentSize,
+    }) => {
+      const paddingToBottom = 20;
+      return (
+        layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom
+      );
+    };
   }
+  wait(timeout) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  }
+  handleMore = async () => {
+    //if(hasMore){}
+    setLoadMore(true);
+    let httpReq = cadenaConexion + nextPage;
+    // console.log(httpReq);
+    await axios
+      .get(httpReq)
+      .then((response) => {var checked = "";
+        try {
+          setNextPage(response.data.Siguiente);
+          //console.log(nextPage);
+        } catch (error) {
+          console.log(error);
+        }
+
+        setLoadMore(false);
+        const resultDocuments = [...docs, ...response.data.Documentos];
+        setDocs(resultDocuments);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        setLoadMore(false);
+      });
+  };
+  fetchDocs = async () => {
+    axios
+      .get(
+        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=8&texto=${props.busqueda}&idcarpeta=${carpeta}`
+      )
+      .then((response) => {
+        //console.log(`response.data`);
+        {
+          response.data.Siguiente === "" ? setHasMore(false) : setHasMore(true);
+        }
+        //console.log(hasMore);
+
+        setNextPage(response.data.Siguiente);
+        setLoading(false);
+        setLoadMore(false);
+        setDocs(response.data.Documentos);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  };
+  
+  dateFormater = (dt) => {
+    Moment.locale("en-us");
+    return <Text>{Moment(dt).format("D/M/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
+  };
+
+  
+  
+  fetchDoc = async (id, tipo, status) => {
+    fetch(`http://10.0.0.17/ApiMisOficios/api/Documentos/{${id}}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        // console.log(response);
+
+        {
+          response.documentoHTML
+            ? Actions.documento({
+                docString: response.documentoHTML,
+                tipo: tipo,
+                updateList: updateList,
+                setUpdateList: setUpdateList,
+                id: idUs,
+                IdDoc: id,
+                status: status,
+              })
+            : console.log("Documento para borrador");
+        }
+      })
+      .then();
+  };
 
   render() {
     <ScrollView
