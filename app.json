@@ -12,11 +12,7 @@
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icono.png",
-    "splash": {
-      "image": "./assets/escudo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+   
     "updates": {
       "fallbackToCacheTimeout": 0
     },

@@ -12,9 +12,6 @@ import {
   AsyncStorage,
 } from "react-native";
 
-import CustomNavBar from "../components/CustomNavBar";
-import { ScrollView } from "react-native-gesture-handler";
-import ActionButton from "react-native-action-button";
 import { Actions } from "react-native-router-flux";
 import RBSheet from "react-native-raw-bottom-sheet";
 import OficiosCardView from "../components/Oficios/OficioCardView";
@@ -38,31 +35,23 @@ export default function Oficios(props) {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   //console.log(props);
 
+
+
   useEffect(() => {
     setRenderComponent(false);
     setIsVisibleModal(false);
   }, []);
 
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
-        {
-          text: "No",
-          onPress: () => null,
-          style: "cancel",
-        },
-        { text: "Sí", onPress: () => BackHandler.exitApp() },
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
+  //useEffect(() => {
+  // 
+  //    const backHandler = BackHandler.addEventListener(
+  //      "hardwareBackPress",
+  //      backAction
+  //    );
+  //    return () => backHandler.remove();
+  //  
+  //  
+  //}, []);
 
   return (
     <View style={styles.buttonsheet}>
@@ -145,7 +134,7 @@ export default function Oficios(props) {
             />
           </View>
         </RBSheet>
-        <Loading text="Cargando Archivos" isVisible={loading} />
+        <Loading text="Cargando" isVisible={loading} />
 
         {
           /////////////////////////////

@@ -59,8 +59,11 @@ export default function Splash(props) {
         //    carpeta: carpetas,
         //  });
       } else {
-        setRenderComponent(asdstrue);
+        setTimeout(() => {
+          setRenderComponent(true);
         setIsVisibleModal(true);
+        }, 1800);
+        
       }
     } catch (e) {
       //console.log(e);
@@ -131,7 +134,7 @@ export default function Splash(props) {
         // }
       },
       // Actions.oficios()
-      1000
+      3000
     );
   }, []);
 

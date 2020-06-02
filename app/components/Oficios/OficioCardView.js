@@ -3,17 +3,20 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
+  Alert,
   RefreshControl,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  BackHandler
 } from "react-native";
 import { Card, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Moment from "moment";
+import Loading from '../Loading'
 const screenHeight = Math.round(Dimensions.get("window").height);
 
 export default function OficiosCardView(props) {
@@ -38,13 +41,35 @@ export default function OficiosCardView(props) {
       contentSize.height - paddingToBottom
     );
   };
-
+  const backAction = () => {
+   // Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
+   //   {
+   //     text: "No",
+   //     onPress: () => null,
+   //     style: "cancel",
+   //   },
+   //   { text: "Sí", onPress: () => BackHandler.exitApp() },
+   // ]);
+    return true;
+  };
   //console.log(props);
   function wait(timeout) {
     return new Promise((resolve) => {
       setTimeout(resolve, timeout);
     });
   }
+
+  useEffect(() => {
+   
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  
+  
+}, []);
+
   const handleMore = async () => {
     //if(hasMore){}
     setLoadMore(true);
@@ -108,7 +133,6 @@ export default function OficiosCardView(props) {
       .then((response) => response.json())
       .then((response) => {
        
-
         {
           response.documentoHTML
             ? Actions.documento({
@@ -119,6 +143,7 @@ export default function OficiosCardView(props) {
                 id: idUs,
                 IdDoc: id,
                 status: status,
+                setLoading:setLoading,
               })
             : console.log("Documento para borrador");
         }
@@ -164,6 +189,11 @@ export default function OficiosCardView(props) {
           <TouchableOpacity
             key={i}
             onPress={() => {
+              setLoading(true)
+              BackHandler.removeEventListener(
+                "hardwareBackPress",
+                backAction
+              );
               fetchDoc(u.IdDocumento, u.Tipo, u.Estatus);
             }}
           >
