@@ -61,14 +61,15 @@ export default function Splash(props) {
       } else {
         setTimeout(() => {
           setRenderComponent(true);
-        setIsVisibleModal(true);
+          setIsVisibleModal(true);
+          _start();
         }, 1800);
-        
       }
     } catch (e) {
       //console.log(e);
       setRenderComponent(true);
       setIsVisibleModal(true);
+      _start();
     }
   };
   var carpetas;
@@ -123,17 +124,8 @@ export default function Splash(props) {
     getData();
     setTimeout(
       () => {
-        //if (isLogged == "true" || null) {
-        //setRenderComponent(false);
-        //setIsVisibleModal(false);
-        //setLoading(false);
-        //  } else {
-
         _start();
-
-        // }
       },
-      // Actions.oficios()
       3000
     );
   }, []);

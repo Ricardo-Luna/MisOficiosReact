@@ -10,13 +10,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
-  BackHandler
+  BackHandler,
 } from "react-native";
 import { Card, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Moment from "moment";
-import Loading from '../Loading'
+import Loading from "../Loading";
 const screenHeight = Math.round(Dimensions.get("window").height);
 
 export default function OficiosCardView(props) {
@@ -42,14 +42,14 @@ export default function OficiosCardView(props) {
     );
   };
   const backAction = () => {
-   // Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
-   //   {
-   //     text: "No",
-   //     onPress: () => null,
-   //     style: "cancel",
-   //   },
-   //   { text: "Sí", onPress: () => BackHandler.exitApp() },
-   // ]);
+    // Alert.alert("Salir", "¿Quieres salir de Mis Oficios?", [
+    //   {
+    //     text: "No",
+    //     onPress: () => null,
+    //     style: "cancel",
+    //   },
+    //   { text: "Sí", onPress: () => BackHandler.exitApp() },
+    // ]);
     return true;
   };
   //console.log(props);
@@ -60,15 +60,12 @@ export default function OficiosCardView(props) {
   }
 
   useEffect(() => {
-   
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
     return () => backHandler.remove();
-  
-  
-}, []);
+  }, []);
 
   const handleMore = async () => {
     //if(hasMore){}
@@ -102,11 +99,11 @@ export default function OficiosCardView(props) {
   }, [refreshing]);
 
   const fetchDocs = async () => {
-    console.log(`${screenHeight}, cards per screen ${cardsPerScreen}`);
+    //console.log(`${screenHeight}, cards per screen ${cardsPerScreen}`);
 
     axios
       .get(
-        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=${cardsPerScreen}&texto=${props.busqueda}&idcarpeta=${carpeta}`
+        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=8&texto=${props.busqueda}&idcarpeta=${carpeta}`
       )
       .then((response) => {
         //console.log(`response.data`);
@@ -132,7 +129,6 @@ export default function OficiosCardView(props) {
     })
       .then((response) => response.json())
       .then((response) => {
-       
         {
           response.documentoHTML
             ? Actions.documento({
@@ -143,9 +139,10 @@ export default function OficiosCardView(props) {
                 id: idUs,
                 IdDoc: id,
                 status: status,
-                setLoading:setLoading,
+                setLoading: setLoading,
               })
             : console.log("Documento para borrador");
+          setLoading(false);
         }
       })
       .then();
@@ -157,7 +154,7 @@ export default function OficiosCardView(props) {
   const dateFormater = (dt) => {
     var esLocale = require("moment/locale/es");
     Moment.updateLocale("es", esLocale);
-    return <Text>{Moment(dt).format("D/M/YYYY  HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
+    return <Text>{Moment(dt).format("D/MM/YYYY | HH:mm")}</Text>; //basically you can do all sorts of the formatting and others
   };
   var checked = "";
   return (
@@ -189,11 +186,8 @@ export default function OficiosCardView(props) {
           <TouchableOpacity
             key={i}
             onPress={() => {
-              setLoading(true)
-              BackHandler.removeEventListener(
-                "hardwareBackPress",
-                backAction
-              );
+              setLoading(true);
+              BackHandler.removeEventListener("hardwareBackPress", backAction);
               fetchDoc(u.IdDocumento, u.Tipo, u.Estatus);
             }}
           >
@@ -236,25 +230,28 @@ export default function OficiosCardView(props) {
                   </Text>
                   <Text> </Text>
                   <View style={styles.iconsfin}>
-                    {u.TieneArchivosAdjuntos && (
+                   
+                   
                       <Icon
                         name="attach-file"
                         type="material"
-                        color="black"
+                        color={u.TieneArchivosAdjuntos ? "black" : "white" }
                         reverseColor="black"
                       />
-                    )}
-                    {u.Tipo === 1 && (
+                   
+
+                    
                       <Icon
-                        name={"playlist-edit"}
+                        name={"eraser"}
                         type="material-community"
-                        color="black"
+                        color={u.Tipo === 1 ? "black" : "white" }
                       />
-                    )}
+                    
+
                     <Icon
                       name={
                         u.Estatus === 2
-                          ? "arrow-up-bold-box-outline"
+                          ? "arrow-right-bold-box-outline"
                           : "arrow-down-bold-box-outline"
                       }
                       type="material-community"
@@ -265,16 +262,20 @@ export default function OficiosCardView(props) {
                     {
                       //  console.log(u.IdDocumento)
                     }
-                    {u.Tipo > 1 && (
+                    {u.Tipo > 1 ? (
                       <Icon
-                        name={
-                          u.Leido === 2 && u.Tipo >= 2 ? "eye-check" : "eye-off"
-                        }
+                        name={u.Leido === 2 && u.Tipo >= 2 ? "eye" : "eye-off"}
                         type="material-community"
-                        color={u.Leido === 2 ? "#20B2AA" : "black"}
+                        color={u.Leido === 2 ? "orange" : "black"}
+                        reverseColor="black"
+                      />):
+                      <Icon
+                        name={ "eye" }
+                        type="material-community"
+                        color={u.Leido === 2 ? "white" : "white"}
                         reverseColor="black"
                       />
-                    )}
+                    }
                   </View>
                 </View>
                 <View>
@@ -316,7 +317,7 @@ export default function OficiosCardView(props) {
     } else {
       return (
         <View style={styles.notFoundDocuments}>
-          <Text>Fin de la lista</Text>
+          <Text>◉</Text>
         </View>
       );
     }
