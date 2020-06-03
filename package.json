@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/netinfo": "5.0.0",
     "@react-navigation/stack": "^5.1.1",
     "expo": "~36.0.0",
     "md5": "^2.2.1",
@@ -24,7 +25,7 @@
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.0",
     "react-native-linear-gradient": "^2.5.6",
-    "react-native-netinfo": "^1.1.0",
+    "react-native-network-info": "^5.2.1",
     "react-native-raw-bottom-sheet": "^2.0.6",
     "react-native-reanimated": "^1.7.0",
     "react-native-render-html": "^4.2.0",

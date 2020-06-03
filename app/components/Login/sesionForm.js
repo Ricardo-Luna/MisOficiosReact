@@ -17,14 +17,14 @@ export default function Login(props) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [error, setError] = useState(null);
-  const [pw, setPw] = useState("");
+  const [pw, setPw] = useState("123");
   //const [carpetas, setCarpetas] = useState("");
   const [carpetaInicial, setCarpetaInicial] = useState("");
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState("cecilia.barajas");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { setRenderComponent, setIsVisible, toastRef } = props;
-
+  var t;
   const credenciales = {
     NickName: user,
     Password: pw,
@@ -81,36 +81,49 @@ export default function Login(props) {
   };
 
   const loginAxios = async () => {
-    await axios({
-      method: "post",
-      url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
-      data: credenciales,
-      headers: { "Content-Type": "application/json" },
-      timeout: 1,
-    })
-      .then(function (response) {
-        if (response.data.Permisos[0].NumeroPermiso === 1000) {
-          console.log("Inicio de sesión exitoso");
-          {
-            isEnabled && storeData();
-          }
-          getCarpetas(response.data.IdUsuario);
-          id = response.data.IdUsuario;
-          AsyncStorage.setItem("@idUser", id);
-        } else {
-          setIsLoading(false);
-        }
+    var p2 = new Promise((resolve, reject) => {
+     t= setTimeout(() => {
+        setIsLoading(false);
+        toastRef.current.show("Revisa tu conexión a red");
+        resolve;
+      }, 3000);
+    });
+    var p1 = new Promise((resolve, reject) => {
+      axios({
+        method: "post",
+        url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
+        data: credenciales,
+        headers: { "Content-Type": "application/json" },
       })
-      .catch(function (error) {
-        toastRef.current.show("Revisa tus credenciales");
-        console.log("Fallo");
-        
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          //console.log(error.response.headers);
+        .then(function (response) {
+          if (response.data.Permisos[0].NumeroPermiso === 1000) {
+            clearTimeout(t)
+            console.log("Inicio de sesión exitoso");
+            {
+              isEnabled && storeData();
+            }
+            getCarpetas(response.data.IdUsuario);
+            id = response.data.IdUsuario;
+            AsyncStorage.setItem("@idUser", id);
+          } else {
+            setIsLoading(false);
+          }
+        })
+        .catch(function (error) {
+          toastRef.current.show("Revisa tus credenciales");
+          console.log("Fallo");
           setIsLoading(false);
-        }
+          if (error.response) {
+            toastRef.current.show("Revisa tus credenciales");
+          }
+        });
+    });
+    Promise.race([p1, p2])
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        toastRef.current.show("Revisa tu conexión a red");
       });
   };
 
@@ -168,8 +181,10 @@ export default function Login(props) {
           Keyboard.dismiss();
           if (user === "" || pw === "") {
             toastRef.current.show("Campos vacíos");
-          } else {123   
+          } else {
+            123;
             setIsLoading(true);
+
             loginAxios();
           } //LoginAxios(user,pw);
         }}

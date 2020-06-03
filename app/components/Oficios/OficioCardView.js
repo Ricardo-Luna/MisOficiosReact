@@ -16,7 +16,7 @@ import { Card, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import axios from "react-native-axios";
 import Moment from "moment";
-import Loading from "../Loading";
+import { NetworkInfo } from "react-native-network-info";
 const screenHeight = Math.round(Dimensions.get("window").height);
 
 export default function OficiosCardView(props) {

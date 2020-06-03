@@ -41,11 +41,12 @@ export default async function LoginAxios(user, pw) {
     DerechosRangoInicial: 1000,
     DerechosRangoFinal: 1012,
   };
-  await axios({
+  await axios ({
     method: "post",
     url: "http://10.0.0.17/ApiUsuarios/api/Usuarios/Login",
     data: credenciales,
     headers: { "Content-Type": "application/json" },
+    timeout: 2000,
   })
     .then(function (response) {
       if (response.data.Permisos[0].NumeroPermiso === 1000) {
