@@ -3,6 +3,7 @@ import {
   ScrollView,
   Dimensions,
   StyleSheet,
+  Image,
   View,
   Text,
   BackHandler,
@@ -12,8 +13,6 @@ import Firmar from "../components/Firmar/Firmar";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import Modal from "../components/modal";
 import { Actions } from "react-native-router-flux";
-import axios from "react-native-axios";
-import SesionForm from "../components/Login/sesionForm";
 const screenHeight = Math.round(Dimensions.get("window").height);
 const screenwidth = Math.round(Dimensions.get("window").width);
 
@@ -50,10 +49,10 @@ export default function Documento(props) {
 
   getOrientation = () => {
     if (screenwidth < screenHeight) {
-     // console.log("Horizontal");
+      // console.log("Horizontal");
       return "Horizontal";
     } else {
-    //  console.log("Vertical");
+      //  console.log("Vertical");
       return "Vertical";
     }
   };
@@ -79,7 +78,17 @@ export default function Documento(props) {
     <ScrollView style={styles.scrollStyle}>
       {status <= 3 && checkRead()}
       {setLoading(false)}
-      {console.log(getOrientation())}
+      <View style={styles.htmlmargin}></View>
+      {
+        /////////////////////////////////////////////////
+      }
+      <Image
+        source={require("../../assets/escudo.png")}
+        style={styles.escudo}
+      />
+      {
+        /////////////////////////////////////////////
+      }
       <HTML
         html={htmlContent}
         imagesMaxWidth={Dimensions.get("window").width + 1200}
@@ -101,7 +110,6 @@ export default function Documento(props) {
           </View>
         </RNSlidingButton>
       )}
-
       {renderComponent && (
         <Modal
           isVisible={isVisibleModal}
@@ -112,10 +120,23 @@ export default function Documento(props) {
           {<Firmar setRenderComponent={setRenderComponent} />}
         </Modal>
       )}
+      <View style={styles.htmlbottom}></View>
     </ScrollView>
   );
 }
 const styles = StyleSheet.create({
+  escudo: {
+    width: 75,
+    height: 110,
+    marginLeft: 30,
+    //marginBottom:-50
+  },
+  htmlmargin: {
+    height: 60,
+  },
+  htmlbottom: {
+    height: 120,
+  },
   htmlstyle: {
     marginLeft: 15,
     marginEnd: 15,

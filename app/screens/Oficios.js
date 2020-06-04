@@ -4,29 +4,25 @@ import { Icon, Divider, Input, ListItem } from "react-native-elements";
 import {
   View,
   StyleSheet,
-  Button,
-  Text,
   Alert,
-  BackHandler,
   Dimensions,
   AsyncStorage,
 } from "react-native";
+import Toast from "react-native-easy-toast";
 
 import { Actions } from "react-native-router-flux";
 import RBSheet from "react-native-raw-bottom-sheet";
 import OficiosCardView from "../components/Oficios/OficioCardView";
 import Carpetas from "../components/Carpetas/Carpetas";
 import Loading from "../components/Loading";
-//import Modal from "../components/Modal";
 const screenHeight = Math.round(Dimensions.get("window").height) / 10;
-const screenwidth = Math.round(Dimensions.get("window").width) / 2;
 
 export default function Oficios(props) {
   //console.log(props);
   const [carpetas, setCarpetas] = useState(props.inicio);
   const [busqueda, setBusqueda] = useState("");
   const [updateList, setUpdateList] = useState(0);
-  //const [carpetaInicial, setcarpetaInicial] = useState("");
+  const toastRef = useRef();
   const [loading, setLoading] = useState(true);
   const refRBSheet = useRef();
   const refRBSheetOp = useRef();
@@ -35,26 +31,25 @@ export default function Oficios(props) {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   //console.log(props);
 
-
-
   useEffect(() => {
     setRenderComponent(false);
     setIsVisibleModal(false);
   }, []);
 
   //useEffect(() => {
-  // 
+  //
   //    const backHandler = BackHandler.addEventListener(
   //      "hardwareBackPress",
   //      backAction
   //    );
   //    return () => backHandler.remove();
-  //  
-  //  
+  //
+  //
   //}, []);
 
   return (
     <View style={styles.buttonsheet}>
+       <Toast ref={toastRef} position="center" opacity={0.7} />
       <View style={styles.cardview}>
         <OficiosCardView
           busqueda={busqueda}
@@ -62,6 +57,7 @@ export default function Oficios(props) {
           carpeta={carpetas}
           setLoading={setLoading}
           updateList={updateList}
+          toastRef={toastRef}
           setUpdateList={setUpdateList}
         />
         <RBSheet
@@ -194,6 +190,7 @@ export default function Oficios(props) {
               />
             </View>
           </View>
+         
         </View>
 
         {

@@ -8,12 +8,11 @@ import LoginAxios from "../components/Login/login";
 import NetInfo from "@react-native-community/netinfo";
 
 export default function Splash() {
-
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
+  const [connectionType, setConnectionType] = useState("");
   const toastRef = useRef();
-
   const getData = async () => {
     try {
       console.log(isConnected);
@@ -28,43 +27,43 @@ export default function Splash() {
         setTimeout(() => {
           setRenderComponent(true);
           setIsVisibleModal(true);
-          _start();
+          //   _start();
         }, 1800);
       }
     } catch (e) {
       setRenderComponent(true);
       setIsVisibleModal(true);
-      _start();
+      // _start();
     }
   };
   //-----------------------------------------
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      console.log("Connection type", state.type);
-      console.log("Is connected?", state.isConnected);
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      //console.log(state);
+      setConnectionType(state.type);
+      setIsConnected(state.isConnected);
+      //console.log("Connection type", state.type);
+      //console.log("Is connected?", state.isConnected);
     });
-    return () => {unsubscribe()}
-   // NetInfo.isConnected.addEventListener(
-   //   "connectionChange",
-   //   handleConnectivityChange
-   // );
-   // return () => {
-   //   NetInfo.isConnected.removeEventListener(
-   //     "connectionChange",
-   //     handleConnectivityChange
-   //   );
-   // };
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  handleConnectivityChange = (isConnected) => setIsConnected(isConnected);
+  //useEffect(() => {
+  //  toastRef.current.show(`Conexión en ${state.type}`)
+  //}, [state.isConnected])
 
   useEffect(() => {
-    getData();
-
-    //setTimeout(() => {
-    //  _start();
-    //}, 3000);
-  }, []);
+    if (isConnected) {
+      // if (connectionType === "wifi") {
+      _start();
+      getData();
+      // }
+    } else {
+      toastRef.current.show("No tiene conexión a internet", 2000);
+    }
+  }, [isConnected]);
   //-------------------------------------------------------
   return (
     <View>

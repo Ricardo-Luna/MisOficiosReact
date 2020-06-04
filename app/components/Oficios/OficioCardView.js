@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 //import { ScrollView } from "react-native-gesture-handler";
 import {
   View,
@@ -20,9 +20,8 @@ import { NetworkInfo } from "react-native-network-info";
 const screenHeight = Math.round(Dimensions.get("window").height);
 
 export default function OficiosCardView(props) {
-  const { busqueda, updateList, setUpdateList } = props;
+  const { busqueda, updateList, setUpdateList, toastRef } = props;
   const [docs, setDocs] = useState([]);
-  // const [actualizar, setActualizar] = useState([])
   const [loadMore, setLoadMore] = useState(true);
   const [refreshing, setRefreshing] = React.useState(false);
   const [nextPage, setNextPage] = useState("");
@@ -30,6 +29,7 @@ export default function OficiosCardView(props) {
   const { carpeta, setLoading, idUs } = props;
   const cadenaConexion = "http://10.0.0.17/ApiMisOficios";
   const cardsPerScreen = (screenHeight / 130 - 1).toFixed(0);
+
   const isCloseToBottom = ({
     layoutMeasurement,
     contentOffset,
@@ -141,7 +141,7 @@ export default function OficiosCardView(props) {
                 status: status,
                 setLoading: setLoading,
               })
-            : console.log("Documento para borrador");
+            : toastRef.current.show("Error al cargar documento ", 2000);
           setLoading(false);
         }
       })
@@ -230,23 +230,18 @@ export default function OficiosCardView(props) {
                   </Text>
                   <Text> </Text>
                   <View style={styles.iconsfin}>
-                   
-                   
-                      <Icon
-                        name="attach-file"
-                        type="material"
-                        color={u.TieneArchivosAdjuntos ? "black" : "white" }
-                        reverseColor="black"
-                      />
-                   
+                    <Icon
+                      name="attach-file"
+                      type="material"
+                      color={u.TieneArchivosAdjuntos ? "black" : "white"}
+                      reverseColor="black"
+                    />
 
-                    
-                      <Icon
-                        name={"eraser"}
-                        type="material-community"
-                        color={u.Tipo === 1 ? "black" : "white" }
-                      />
-                    
+                    <Icon
+                      name={"eraser"}
+                      type="material-community"
+                      color={u.Tipo === 1 ? "black" : "white"}
+                    />
 
                     <Icon
                       name={
@@ -268,14 +263,15 @@ export default function OficiosCardView(props) {
                         type="material-community"
                         color={u.Leido === 2 ? "orange" : "black"}
                         reverseColor="black"
-                      />):
+                      />
+                    ) : (
                       <Icon
-                        name={ "eye" }
+                        name={"eye"}
                         type="material-community"
                         color={u.Leido === 2 ? "white" : "white"}
                         reverseColor="black"
                       />
-                    }
+                    )}
                   </View>
                 </View>
                 <View>

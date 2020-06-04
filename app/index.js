@@ -26,7 +26,7 @@ export default App = () => {
           hideNavBar={false}
           back={false}
         />
-        <Scene key="documento" back={true} component={Documento} />
+        <Scene key="documento" back={false} hideNavBar={true} component={Documento} />
       </Scene>
     </Router>
   );

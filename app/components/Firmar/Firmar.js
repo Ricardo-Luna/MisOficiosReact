@@ -7,8 +7,8 @@ import Toast from "react-native-easy-toast";
 
 export default function firmar(props) {
   const [error, setError] = useState(null);
-  const [pw, setPw] = useState("123");
-  const [user, setUser] = useState("ricardo.luna");
+  const [pw, setPw] = useState("");
+  const [user, setUser] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { setRenderComponent } = props;
@@ -27,7 +27,7 @@ export default function firmar(props) {
       <Input
         placeholder="Usuario"
         containerStyle={styles.input}
-        defaultValue="ricardo.luna"
+        defaultValue=""
         onChange={(e) => setUser(e.nativeEvent.text)}
         rightIcon={{
           type: "material-community",
@@ -40,7 +40,7 @@ export default function firmar(props) {
         placeholder="Contraseña"
         containerStyle={styles.input}
         password={true}
-        defaultValue="123"
+        defaultValue=""
         secureTextEntry={hidePassword}
         onChange={(e) => setPw(e.nativeEvent.text)}
         rightIcon={{
