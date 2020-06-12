@@ -103,7 +103,7 @@ export default function OficiosCardView(props) {
 
     axios
       .get(
-        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=8&texto=${props.busqueda}&idcarpeta=${carpeta}`
+        `http://10.0.0.17/ApiMisOficios/api/Documentos/Buscar?offset=0&limit=${cardsPerScreen}&texto=${props.busqueda}&idcarpeta=${carpeta}`
       )
       .then((response) => {
         //console.log(`response.data`);
@@ -177,8 +177,8 @@ export default function OficiosCardView(props) {
       }
     >
       {docs.map((u, i) => {
-        if (u.Leido === 2 && u.Tipo >= 2) {
-          checked = "eye-check";
+        if (u.Leido === 2 ) {
+          checked = "eye";
         } else {
           checked = "eye-off";
         }
@@ -257,21 +257,25 @@ export default function OficiosCardView(props) {
                     {
                       //  console.log(u.IdDocumento)
                     }
-                    {u.Tipo > 1 ? (
+                    {
+                      //u.Tipo > 1 ? (
                       <Icon
-                        name={u.Leido === 2 && u.Tipo >= 2 ? "eye" : "eye-off"}
+                        name={checked}
                         type="material-community"
-                        color={u.Leido === 2 ? "orange" : "black"}
+                        color={
+                          u.Leido === 2  ? "orange" : "black"
+                        }
                         reverseColor="black"
                       />
-                    ) : (
-                      <Icon
-                        name={"eye"}
-                        type="material-community"
-                        color={u.Leido === 2 ? "white" : "white"}
-                        reverseColor="black"
-                      />
-                    )}
+                      // ) : (
+                      //   <Icon
+                      //     name={"eye"}
+                      //     type="material-community"
+                      //     color={u.Leido === 2 ? "white" : "white"}
+                      //     reverseColor="black"
+                      //   />
+                      // )
+                    }
                   </View>
                 </View>
                 <View>
@@ -324,10 +328,11 @@ const styles = StyleSheet.create({
   leido: {
     flexDirection: "column",
     //  fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 18,
     //backgroundColor: "cyan",
   },
   noLeido: {
+    fontSize: 12,
     flexDirection: "column",
     color: "#1f93db",
   },

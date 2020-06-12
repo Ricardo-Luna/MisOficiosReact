@@ -14,12 +14,30 @@ export default function Carpetas(props) {
     loading,
     refRBSheet,
   } = props;
+  var carpetas = "";
 
+  useEffect(() => {
+    fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${IdUsuario}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        carpetasCompleta = responseJson;
+        console.log(carpetasCompleta);
+ 
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [refRBSheet]);
   //console.log(props);
+
   var sub = "";
   return (
     <ScrollView>
-      {console.log(idActual)}
+      {
+        //console.log(idActual)}
+      }
       {carpetasCompleta ? (
         carpetasCompleta.map((u, i) => {
           sub = " ";

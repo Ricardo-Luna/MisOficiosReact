@@ -94,6 +94,7 @@ export default function Documento(props) {
         imagesMaxWidth={Dimensions.get("window").width + 1200}
         containerStyle={styles.htmlstyle}
       />
+       {/*
       {tipo === 1 && (
         <RNSlidingButton
           style={styles.slidingButtom}
@@ -103,13 +104,18 @@ export default function Documento(props) {
           }}
           slideDirection={SlideDirection.RIGHT}
         >
+         
+
+          
           <View>
             <Text numberOfLines={1} style={styles.titleText}>
-              DESLIZA PARA FIRMAR >
+              DESLIZA PARA FIRMAR →
             </Text>
           </View>
         </RNSlidingButton>
-      )}
+        )}
+        */}
+      
       {renderComponent && (
         <Modal
           isVisible={isVisibleModal}

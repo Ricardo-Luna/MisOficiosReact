@@ -5,7 +5,7 @@ import axios from "react-native-axios";
 var carpeta = "",
   id = "",
   carpetas = "";
-async function getCarpetas(user) {
+async function getCarpetas(user,name) {
   {
     await fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${user}`, {
       method: "GET",
@@ -24,6 +24,7 @@ async function getCarpetas(user) {
           id: id,
           inicio: carpeta,
           carpeta: carpetas,
+          username: name,
         });
         //setRenderComponent();
       })
@@ -50,7 +51,7 @@ export default async function LoginAxios(user, pw) {
   })
     .then(function (response) {
       if (response.data.Permisos[0].NumeroPermiso === 1000) {
-        getCarpetas(response.data.IdUsuario);
+        getCarpetas(response.data.IdUsuario,response.data.NickName);
         id = response.data.IdUsuario;
         storeData(response.data.IdUsuario);
       } else {

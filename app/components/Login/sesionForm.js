@@ -23,6 +23,7 @@ export default function Login(props) {
   const [user, setUser] = useState("cecilia.barajas");
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [carpetaCompleta, setCarpetaCompleta] = useState([]);
   const { setRenderComponent, setIsVisible, toastRef } = props;
   var t;
   const credenciales = {
@@ -42,11 +43,11 @@ export default function Login(props) {
       // console.log(e);
     }
   };
-
+//TODO
   var carpeta = "",
     id = "",
     carpetas = "";
-  const getCarpetas = async (usuario) => {
+  const getCarpetas = async (usuario, nombre) => {
     {
       await fetch(
         `http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${usuario}`,
@@ -56,6 +57,7 @@ export default function Login(props) {
       )
         .then((response) => response.json())
         .then((responseJson) => {
+          setCarpetaCompleta(responseJson);
           carpetas = responseJson;
           responseJson.map((u, i) => {
             if (u.Nombre === "Recibidos") {
@@ -71,6 +73,7 @@ export default function Login(props) {
             id: id,
             inicio: carpeta,
             carpeta: carpetas,
+            username: nombre,
           });
           setRenderComponent();
         })
@@ -82,9 +85,9 @@ export default function Login(props) {
 
   const loginAxios = async () => {
     var p2 = new Promise((resolve, reject) => {
-     t= setTimeout(() => {
+      t = setTimeout(() => {
         setIsLoading(false);
-        toastRef.current.show("Revisa tu conexión a red");
+        //toastRef.current.show("Revisa tu conexión a red");
         resolve;
       }, 3000);
     });
@@ -97,12 +100,12 @@ export default function Login(props) {
       })
         .then(function (response) {
           if (response.data.Permisos[0].NumeroPermiso === 1000) {
-            clearTimeout(t)
+            clearTimeout(t);
             console.log("Inicio de sesión exitoso");
             {
               isEnabled && storeData();
             }
-            getCarpetas(response.data.IdUsuario);
+            getCarpetas(response.data.IdUsuario, response.data.NickName);
             id = response.data.IdUsuario;
             AsyncStorage.setItem("@idUser", id);
           } else {

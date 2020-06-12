@@ -27,13 +27,13 @@ export default function Splash() {
         setTimeout(() => {
           setRenderComponent(true);
           setIsVisibleModal(true);
-          //   _start();
+          _start();
         }, 1800);
       }
     } catch (e) {
       setRenderComponent(true);
       setIsVisibleModal(true);
-      // _start();
+      _start();
     }
   };
   //-----------------------------------------

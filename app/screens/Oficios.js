@@ -19,6 +19,8 @@ const screenHeight = Math.round(Dimensions.get("window").height) / 10;
 
 export default function Oficios(props) {
   //console.log(props);
+  //console.log(props.username);
+  
   const [carpetas, setCarpetas] = useState(props.inicio);
   const [busqueda, setBusqueda] = useState("");
   const [updateList, setUpdateList] = useState(0);
@@ -104,7 +106,7 @@ export default function Oficios(props) {
           <View>
             <ListItem title={"Ayuda"} onPress={() => {}} />
             <ListItem
-              title={"Cerrar sesión"}
+              title={`Cerrar sesión (${props.username})`}
               onPress={() => {
                 refRBSheetOp.current.close();
                 Alert.alert(
