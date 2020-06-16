@@ -43,7 +43,7 @@ export default function Login(props) {
       // console.log(e);
     }
   };
-//TODO
+  //TODO
   var carpeta = "",
     id = "",
     carpetas = "";
@@ -72,8 +72,10 @@ export default function Login(props) {
           Actions.oficios({
             id: id,
             inicio: carpeta,
-            carpeta: carpetas,
+            carpetasInicial: carpetas,
+            carpetaCompleta: carpetaCompleta,
             username: nombre,
+            setCarpetaCompleta: setCarpetaCompleta,
           });
           setRenderComponent();
         })

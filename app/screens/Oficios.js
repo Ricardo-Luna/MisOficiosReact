@@ -18,10 +18,17 @@ import Loading from "../components/Loading";
 const screenHeight = Math.round(Dimensions.get("window").height) / 10;
 
 export default function Oficios(props) {
-  //console.log(props);
-  //console.log(props.username);
+  const {
+    inicio,
+    id,
+    carpetaCompleta,
+    setCarpetaCompleta,
+    username,
+    carpetasInicial,
+  } = props;
+  console.log("Oficios");
   
-  const [carpetas, setCarpetas] = useState(props.inicio);
+  const [carpetas, setCarpetas] = useState(inicio);
   const [busqueda, setBusqueda] = useState("");
   const [updateList, setUpdateList] = useState(0);
   const toastRef = useRef();
@@ -31,7 +38,7 @@ export default function Oficios(props) {
   const [inputShow, setInputShow] = useState(false);
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
-  //console.log(props);
+
 
   useEffect(() => {
     setRenderComponent(false);
@@ -51,12 +58,13 @@ export default function Oficios(props) {
 
   return (
     <View style={styles.buttonsheet}>
-       <Toast ref={toastRef} position="center" opacity={0.7} />
+      <Toast ref={toastRef} position="center" opacity={0.7} />
       <View style={styles.cardview}>
         <OficiosCardView
           busqueda={busqueda}
-          idUs={props.id}
+          idUs={id}
           carpeta={carpetas}
+          // carpetasInicial={carpetasInicial}
           setLoading={setLoading}
           updateList={updateList}
           toastRef={toastRef}
@@ -80,11 +88,13 @@ export default function Oficios(props) {
         >
           <Carpetas
             setCarpetaID={setCarpetas}
+            carpetasInicial={carpetasInicial}
             refRBSheet={refRBSheet}
-            IdUsuario={props.id}
+            IdUsuario={id}
             loading={setLoading}
             idActual={carpetas}
-            carpetasCompleta={props.carpeta}
+            carpetasCompleta={carpetaCompleta}
+            setCarpetaCompleta={setCarpetaCompleta}
           />
         </RBSheet>
         <RBSheet
@@ -106,7 +116,7 @@ export default function Oficios(props) {
           <View>
             <ListItem title={"Ayuda"} onPress={() => {}} />
             <ListItem
-              title={`Cerrar sesión (${props.username})`}
+              title={`Cerrar sesión (${username})`}
               onPress={() => {
                 refRBSheetOp.current.close();
                 Alert.alert(
@@ -192,7 +202,6 @@ export default function Oficios(props) {
               />
             </View>
           </View>
-         
         </View>
 
         {

@@ -65,11 +65,11 @@ export default function Documento(props) {
       }
     )
       .then((response) => {
-        console.log(
-          `http://10.0.0.17/ApiMisOficios/api/Documentos/${IdDoc}/MarcarLeido/${id}`
-        );
+        //  console.log(
+        //    `http://10.0.0.17/ApiMisOficios/api/Documentos/${IdDoc}/MarcarLeido/${id}`
+        //  );
 
-        console.log(response.status);
+        // console.log(response.status);
         setUpdateList(updateList + 1);
       })
       .catch((response) => console.log(response));
@@ -94,7 +94,7 @@ export default function Documento(props) {
         imagesMaxWidth={Dimensions.get("window").width + 1200}
         containerStyle={styles.htmlstyle}
       />
-       {/*
+      {/*
       {tipo === 1 && (
         <RNSlidingButton
           style={styles.slidingButtom}
@@ -115,7 +115,7 @@ export default function Documento(props) {
         </RNSlidingButton>
         )}
         */}
-      
+
       {renderComponent && (
         <Modal
           isVisible={isVisibleModal}

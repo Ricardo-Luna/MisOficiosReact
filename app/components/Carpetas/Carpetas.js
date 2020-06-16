@@ -11,10 +11,21 @@ export default function Carpetas(props) {
     idActual,
     IdUsuario,
     carpetasCompleta,
+    setCarpetaCompleta,
+    carpetasInicial,
     loading,
     refRBSheet,
   } = props;
-  var carpetas = "";
+  console.log("Carpetas");
+
+  const [carpetas, setCarpetas] = useState(carpetasInicial);
+  //console.log(props);
+  //console.log(carpetasInicial);
+
+  // useEffect(() => {
+  //   setCarpetas(carpetasInicial);
+  //
+  // }, []);
 
   useEffect(() => {
     fetch(`http://10.0.0.17/ApiMisOficios/api/Carpetas/Usuario/${IdUsuario}`, {
@@ -22,9 +33,9 @@ export default function Carpetas(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        carpetasCompleta = responseJson;
-        console.log(carpetasCompleta);
- 
+        setCarpetas(responseJson);
+        //setCarpetaCompleta(responseJson);
+        console.log(carpetas);
       })
       .catch((error) => {
         console.error(error);
@@ -38,8 +49,8 @@ export default function Carpetas(props) {
       {
         //console.log(idActual)}
       }
-      {carpetasCompleta ? (
-        carpetasCompleta.map((u, i) => {
+      {carpetas ? (
+        carpetas.map((u, i) => {
           sub = " ";
           if (idActual === u.IdCarpeta) {
             // sub =  u.CantidadDocumentos +" "+" ⌵ " + "Carpeta actual";
@@ -63,7 +74,7 @@ export default function Carpetas(props) {
               linearGradientProps={
                 idActual === u.IdCarpeta
                   ? {
-                      colors: ["#99EDC3", "#99EDC3"],
+                      colors: ["#9ac3e3", "#9ac3e3"],
                       start: { x: 1, y: 0 },
                       end: { x: 0.2, y: 0 },
                     }
