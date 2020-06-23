@@ -195,6 +195,7 @@ export default function OficiosCardView(props) {
               key={i}
               title={u.Estatus === 3 ? `● ${u.Asunto}` : `${u.Asunto}`}
               titleStyle={u.Estatus === 3 ? styles.noLeido : styles.leido}
+              wrapperStyle={styles.wrapperStyle}
             >
               {/*Padre del componente */}
               <View style={styles.card}>
@@ -332,9 +333,17 @@ const styles = StyleSheet.create({
     //backgroundColor: "cyan",
   },
   noLeido: {
-    fontSize: 12,
+    fontSize: 18,
     flexDirection: "column",
     color: "#1f93db",
+    borderLeftWidth: 25,
+    borderLeftColor: '#1f93db',
+    borderRightColor: '#9ac3e3',
+    borderRightWidth: 5,
+  },
+  wrapperStyle:{
+  // borderLeftWidth: 5,
+  // borderLeftColor: '#1f93db'
   },
   card: {
     height: 55,

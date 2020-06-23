@@ -77,6 +77,7 @@ export default function Login(props) {
             username: nombre,
             setCarpetaCompleta: setCarpetaCompleta,
           });
+          setIsLoading(false);
           setRenderComponent();
         })
         .catch((error) => {

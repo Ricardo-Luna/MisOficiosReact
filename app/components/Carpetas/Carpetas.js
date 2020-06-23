@@ -51,7 +51,7 @@ export default function Carpetas(props) {
       }
       {carpetas ? (
         carpetas.map((u, i) => {
-          sub = " ";
+          sub = "";
           if (idActual === u.IdCarpeta) {
             // sub =  u.CantidadDocumentos +" "+" ⌵ " + "Carpeta actual";
             sub = " ⌵ " + "Carpeta actual";
