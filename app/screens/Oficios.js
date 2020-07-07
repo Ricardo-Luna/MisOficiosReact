@@ -144,9 +144,6 @@ export default function Oficios(props) {
         </RBSheet>
         <Loading text="Cargando" isVisible={loading} />
 
-        {
-          /////////////////////////////
-        }
         <View style={styles.navBar}>
           <Divider style={styles.div} height={3} />
           <View style={styles.inView}>
