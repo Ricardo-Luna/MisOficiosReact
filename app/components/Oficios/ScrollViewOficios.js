@@ -125,6 +125,11 @@ export default class ScrollViewOficios extends Component {
   render() {
     <ScrollView
       ref="_scrollview"
+      onScrollBeginDrag={()=>{
+
+      }}
+      
+      persistentScrollbar={false}
       //ref={(scrollView) => {
       //  //Sometimes ref can be null so we check it.
       //  if (scrollView !== null && this.scrollView !== scrollView) {
@@ -132,8 +137,10 @@ export default class ScrollViewOficios extends Component {
       //    scrollView.scrollTo({ x: 100 });
       //  }
       //}}
+
       centerContent={true}
       onScroll={({ nativeEvent }) => {
+
         {
           nextPage && setLoadMore(true);
         }

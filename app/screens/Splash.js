@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, AsyncStorage, StyleSheet } from "react-native";
+import { View, AsyncStorage, StyleSheet, Dimensions } from "react-native";
+import LinearGradient from 'react-native-linear-gradient';
 import Welcome from "../components/Login/welcome";
 import Toast from "react-native-easy-toast";
 import Modal from "../components/modal";
 import SesionForm from "../components/Login/sesionForm";
 import LoginAxios from "../components/Login/login";
 import NetInfo from "@react-native-community/netinfo";
-
+const screenHeight = Math.round(Dimensions.get("window").height);
 export default function Splash() {
   const [renderComponent, setRenderComponent] = useState(false);
   const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -55,19 +56,20 @@ export default function Splash() {
   //}, [state.isConnected])
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected ) {
       // if (connectionType === "wifi") {
       _start();
       getData();
       // }
     } else {
-      toastRef.current.show("No tiene conexión a internet", 2000);
+     // toastRef.current.show("No tiene conexión a internet", 2000);
     }
   }, [isConnected]);
   //-------------------------------------------------------
   return (
     <View>
-      <Welcome />
+      <Welcome  />
+     
       <View style={styles.footer}>
         <View
           style={{ width: 50, height: 50, backgroundColor: "#00b0e1", flex: 1 }}
@@ -97,26 +99,33 @@ export default function Splash() {
               toastRef={toastRef}
               setIsVisible={setIsVisibleModal}
               bckgrColor={"rgba(0, 0, 0, 0)"}
+              isConnected={isConnected}
             />
           }
         </Modal>
       )}
       <Toast ref={toastRef} position="bottom" opacity={1} />
+
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  advertencia: {
+    color: "red",
+    alignContent: "center",
+    top: 50,
+  },
   footer: {
-    alignItems: "center",
+    bottom: 0,
+    //top: screenHeight - 20,
+
     position: "absolute",
-    bottom: 110,
     flexDirection: "row",
-    alignContent: "flex-end",
+
   },
-  elementsContainer: {
-    flex: 1,
-  },
+  
 });
 //var carpetas;
 //  const getCarpetas = async () => {

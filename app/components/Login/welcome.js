@@ -20,76 +20,77 @@ export default function welcome() {
   };
   return (
     <View style={styles.splash}>
-      <Image
-        source={require("../../../assets/img_letra_g.png")}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      />
-      <Animated.View
-        style={{
-          transform: [
-            {
-              translateY: slideUpValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, -(200)],
-              }),
-            },
-            {
-              scaleX: slideUpValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0.9],
-              }),
-            },
-            {
-              scaleY: slideUpValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0.9],
-              }),
-            },
-          ],
-        }}
-      >
-        <Image
-          source={require("../../../assets/icono.png")}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+      { // <Image
+        //  source={require("../../../assets/img_letra_g.png")}
+        //  style={styles.backgroundImage}
+        //  resizeMode="cover"
+        ///>}
+      }
+        <Animated.View
+          style={{
+            top:screenHeight/4.5,
+            transform: [
+              {
+                translateY: slideUpValue.interpolate({
+                  inputRange: [0, 8],
+                  outputRange: [0, -screenHeight],
+                }),
+              },
+              {
+                scaleX: slideUpValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, screenHeight/1000],
+                }),
+              },
+              {
+                scaleY: slideUpValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, screenHeight/1000],
+                }),
+              },
+            ],
+          }}
+        >
+          <Image
+            source={require("../../../assets/icono.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
 
-        <Text style={styles.text}>Mis Oficios</Text>
-      </Animated.View>
-      <Animated.View
-        style={{
-          transform: [
-            {
-              translateY: slideUpValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, screenHeight/2/8],
-              }),
-            },
-            {
-              scaleX: slideUpValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0.9],
-              }),
-            },
-            {
-              scaleY: slideUpValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0.9],
-              }),
-            },
-          ],
-        }}
-      >
-        <Image
-          source={require("../../../assets/escudo.png")}
-          style={styles.escudo}
-          resizeMode="center"
-          resizeMethod="resize"
-        />
-      </Animated.View>
-
-     
+          <Text style={styles.text}>Mis Oficios</Text>
+        </Animated.View>
+        <Animated.View
+          style={{
+            bottom:-(screenHeight/5),
+            transform: [
+              {
+                translateY: slideUpValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, (screenHeight/9)*(screenHeight/900)],
+                }),
+              },
+              {
+                scaleX: slideUpValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1,screenHeight/1000],
+                }),
+              },
+              {
+                scaleY: slideUpValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1,screenHeight/1000],
+                }),
+              },
+            ],
+          }}
+        >
+          <Image
+            source={require("../../../assets/escudo.png")}
+            style={styles.escudo}
+            resizeMode="center"
+            resizeMethod="resize"
+          />
+        </Animated.View>
     </View>
   );
 }
@@ -123,10 +124,10 @@ const styles = StyleSheet.create({
     marginVertical: -30,
   },
   escudo: {
-    bottom: 0,
+    bottom: 10,
     width: "100%",
     height: "80%",
-    marginVertical: -70,
+    
   },
-  
+
 });

@@ -24,7 +24,7 @@ export default function Login(props) {
   const [hidePassword, setHidePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [carpetaCompleta, setCarpetaCompleta] = useState([]);
-  const { setRenderComponent, setIsVisible, toastRef } = props;
+  const { setRenderComponent, setIsVisible, toastRef, isConnected } = props;
   var t;
   const credenciales = {
     NickName: user,
@@ -126,7 +126,7 @@ export default function Login(props) {
     });
     Promise.race([p1, p2])
       .then(() => {
-        setIsLoading(false);
+        //setIsLoading(false);
       })
       .catch(() => {
         toastRef.current.show("Revisa tu conexión a red");
@@ -195,6 +195,11 @@ export default function Login(props) {
           } //LoginAxios(user,pw);
         }}
       />
+      {
+      !isConnected && 
+       <Text style={styles.advertencia}>No hay conexión a Internet</Text>
+       }
+
     </View>
   );
 }
@@ -209,8 +214,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 24,
-
     color: "#404040",
+  },
+  advertencia: {
+    color: "red",
+    alignSelf: "center",
+    paddingTop: 10,
+    //flex: 1,
+    paddingBottom: 10,
   },
   view: {
     alignItems: "center",

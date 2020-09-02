@@ -4,7 +4,7 @@ import { Router, Scene } from "react-native-router-flux";
 import Splash from "./screens/Splash";
 import Oficios from "./screens/Oficios";
 import Documento from "./screens/Documento";
-
+ 
 
 export default App = () => {
   return (
